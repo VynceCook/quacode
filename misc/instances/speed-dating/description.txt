@@ -1,0 +1,14 @@
+bonsoir,
+
+voici des instances de speed-dating de différentes tailles.
+
+Le nom des instances (par exemple F06_M08_RF00_RM02_FM01_08.csv) contient
+en premier le nombre de femmes, ensuite le nombre d’hommes, le nombre max
+de créneaux de retard pour les femmes, le nombre max de créneaux de retard
+pour le hommes, le nombre de rencontres interdites, et enfin le numéro de
+l’instance.
+
+Je pense que vous comprendrez le contenu des fichiers, mais n’hésitez pas
+à me contacter si vous avez des questions
+
+christelle
