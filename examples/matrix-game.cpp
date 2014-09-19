@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -100,7 +107,6 @@ public:
 
   QCSPMatrixGame(const MatrixGameOptions& opt) : Script(), QSpaceInfo()
   {
-    // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
     int depth = opt.n;// Size of the matrix is 2^depth. Large values may take long to solve...
@@ -165,8 +171,6 @@ public:
     element(*this, board, boardIdx, cstUn, ICL_DOM);
 
     branch(*this, X, INT_VAR_NONE(), INT_VAL_MIN());
-
-    // FIN DESCRIPTION PB
   }
 
   QCSPMatrixGame(bool share, QCSPMatrixGame& p)

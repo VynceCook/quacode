@@ -11,3 +11,6 @@ Pour killer un programme afin qu'il génère un core dump : kill -11
 
 Pour faire un diff avec le trunk :
 diff -urN --exclude='.svn' --exclude='.settings' --exclude='autom4te.cache' -x configure -x Makefile -x config.hpp* ~/Dropbox/gecode_trunk/ .
+
+svn propset svn:keywords "Author Date Id Revision" all-interval.cpp
+

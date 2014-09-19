@@ -1,16 +1,19 @@
 /* -*- mode: C++; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
  *  Main authors:
- *     Vincent Barichard <Vincent.Barichard@univ-angers.fr>
  *     Christian Schulte <schulte@gecode.org>
+ *     Vincent Barichard <Vincent.Barichard@univ-angers.fr>
  *
  *  Copyright:
- *     Vincent Barichard, 2013
  *     Christian Schulte, 2013
+ *     Vincent Barichard, 2013
  *
- *  This file is part of Gecode, the generic constraint
- *  development environment:
- *     http://www.gecode.org
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the

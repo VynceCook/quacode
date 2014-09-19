@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -109,9 +116,9 @@ namespace Gecode { namespace Search { namespace Sequential {
         node++;
 
         SpaceStatus curStatus = cur->status(*this);
-        // Si plus de propagateurs dans l'espace alors tout est succès dessous,
-        // il faut donc le traiter comme un cas de succès.
-        // Si il ne reste que des Gardes, alors c'est un succès !
+        // If no more propagators in space then all is succes below.
+        // We deal with that case as any other success.
+        // If it remains only Watch Propagators, then it is a success!
         if ((!cur->failed()) && (cur->propagators() == dynamic_cast<QSpaceInfo*>(cur)->watchConstraints())) curStatus = SS_SOLVED;
 
         switch (curStatus) {
@@ -125,7 +132,7 @@ namespace Gecode { namespace Search { namespace Sequential {
           break;
         case SS_SOLVED:
           dynamic_cast<QSpaceInfo*>(cur)->scenarioSuccess();
-          // On devra dépiler jusqu'au dernier universel
+          // We will must go back to the last universal variable
           bckQuant = FORALL;
           // Deletes all pending branchers
           {

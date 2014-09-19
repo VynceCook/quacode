@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -110,7 +117,6 @@ public:
 
   QCSPNimFibo(const NimFiboOptions& opt) : Script(), QSpaceInfo()
   {
-    // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
     // Number of matches
@@ -124,7 +130,6 @@ public:
     BoolVar o_im1(*this,1,1);
     BoolExpr cutExpr1(BoolVar(*this,1,1));
     BoolExpr cutExpr2(BoolVar(*this,1,1));
-    //branch(*this, X[0], INT_VAR_NONE(), INT_VALUES_MIN());
     branch(*this, X[0], INT_VAR_NONE(), INT_VAL_MIN());
 
     for (int i=1; i < nIterations; i++) {
@@ -142,20 +147,16 @@ public:
         // Adding Cut
         if (opt.cut())
           cut(*this, cutExpr1 && cutExpr2 && !(o1 && o2));  // Universal player can't play
-        //branch(*this, X[i], INT_VAR_NONE(), INT_VALUES_MIN());
         branch(*this, X[i], INT_VAR_NONE(), INT_VAL_MIN());
       } else {
         // Existantial Player
         rel(*this, o_im1 == (o1 && o2 && oi));
-        //branch(*this, X[i], INT_VAR_NONE(), INT_VALUES_MIN());
         branch(*this, X[i], INT_VAR_NONE(), INT_VAL_MIN());
       }
       cutExpr1 = cutExpr1 && o1;
       cutExpr2 = o2;
       o_im1 = oi;
     }
-
-    // FIN DESCRIPTION PB
   }
 
   QCSPNimFibo(bool share, QCSPNimFibo& p)

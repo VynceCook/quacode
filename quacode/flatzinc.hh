@@ -13,12 +13,11 @@
  *     Vincent Barichard, 2014
  *
  *  Last modified:
- *     $Date: 2013-12-17 07:47:27 +0100 (mar. 17 déc. 2013) $ by $Author: tack $
- *     $Revision: 14087 $
+ *     $Date$ by $Author$
+ *     $Revision$
  *
- *  This file is part of Gecode, the generic constraint
- *  development environment:
- *     http://www.gecode.org
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the

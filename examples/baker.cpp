@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -81,7 +88,6 @@ class QCSPBaker : public Script, public QSpaceInfo {
 public:
   QCSPBaker(const BakerOptions& opt) : Script(), QSpaceInfo()
   {
-    // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
 
@@ -103,8 +109,6 @@ public:
 
 
     branch(*this, X, INT_VAR_NONE(), INT_VALUES_MIN());
-
-    // FIN DESCRIPTION PB
   }
 
   QCSPBaker(bool share, QCSPBaker& p) : Script(share,p), QSpaceInfo(*this,share,p)

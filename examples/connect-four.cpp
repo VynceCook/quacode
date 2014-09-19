@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -170,7 +177,6 @@ class ConnectFourAllState : public Script, public QSpaceInfo {
 public:
   ConnectFourAllState(const ConnectFourOptions& _opt) : Script(), QSpaceInfo(), opt(_opt)
   {
-    // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
     // Define constants
@@ -417,8 +423,6 @@ public:
       for (int j=0; j < row; j++)
         rel(*this, board[(nbDecisionVar-1)*row*col+i*row+j] != Nil, ICL_DOM);
     }
-
-    // FIN DESCRIPTION PB
   }
 
   ConnectFourAllState(bool share, ConnectFourAllState& p)

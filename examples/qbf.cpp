@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -93,7 +100,6 @@ class QBFProblem : public Script, public QSpaceInfo {
 public:
   QBFProblem(const QBFOptions& opt) : Script(), QSpaceInfo()
   {
-    // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
 
@@ -178,9 +184,6 @@ public:
     }
 
     branch(*this, X, INT_VAR_NONE(), INT_VAL_MIN());
-
-
-    // FIN DESCRIPTION PB
   }
 
   QBFProblem(bool share, QBFProblem& p) : Script(share,p), QSpaceInfo(*this,share,p)
@@ -201,7 +204,6 @@ int main(int argc, char* argv[])
   QBFOptions opt("Non CNF, Non Prenex, Quantified Boolean Problem",0,true);
   opt.parse(argc,argv);
   Script::run<QBFProblem,QDFS,QBFOptions>(opt);
-
 
   return 0;
 }

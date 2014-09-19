@@ -6,6 +6,13 @@
  *  Copyright:
  *     Vincent Barichard, 2013
  *
+ *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
+ *
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
  *  "Software"), to deal in the Software without restriction, including
@@ -30,22 +37,12 @@
 #include <quacode/qcsp.hh>
 
 #include <quacode/search/sequential/qdfs.hh>
-#ifdef GECODE_HAS_THREADS
-#endif
 
 namespace Gecode { namespace Search {
 
     Engine*
     qdfs(Space* s, const Options& o) {
-#ifdef GECODE_HAS_THREADS
-    Options to = o.expand();
-    if (to.threads == 1.0)
-      return new WorkerToEngine<Sequential::QDFS>(s,to);
-    else
-return new WorkerToEngine<Sequential::QDFS>(s,to);
-#else
-    return new WorkerToEngine<Sequential::QDFS>(s,o);
-#endif
+      return new WorkerToEngine<Sequential::QDFS>(s,o);
     }
   }
 }

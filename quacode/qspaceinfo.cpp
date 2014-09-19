@@ -7,10 +7,11 @@
  *     Vincent Barichard, 2014
  *
  *  Last modified:
+ *     $Date$ by $Author$
+ *     $Revision$
  *
- *  This file is part of Gecode, the generic constraint
- *  development environment:
- *     http://www.gecode.org
+ *  This file is part of Quacode:
+ *     http://quacode.barichard.com
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
@@ -361,66 +362,4 @@ namespace Gecode {
     if (curStrategyMethod & StrategyMethodValues::EXPAND)
       _intVars = IntVarArray(dynamic_cast<Space&>(*this),_intVars+x);
   }
-
-#ifdef SIBUS_THREAD
-  std::vector<BrancherHandle>
-  QSpaceInfo::branch(Home home, ReceiverGecode& receiver, const IntVar& x, IntVarBranch vars, IntBranchFilter bf) {
-    IntVarArgs vaX;
-    vaX << x;
-    return branch(home,receiver,vaX,vars,bf);
-  }
-
-  std::vector<BrancherHandle>
-  QSpaceInfo::branch(Home home, ReceiverGecode& receiver, const IntVarArgs& x, IntVarBranch vars, IntBranchFilter bf) {
-    std::vector<BrancherHandle> result;
-    assert(x.size() > 0);
-    if (home.failed()) return result;
-
-    // Get the quantifier of the first variable of the quantifier
-    TQuantifier curQ = EXISTS;
-    if (unWatched(x[0])) curQ = FORALL;
-    int i = 0;
-    // We iterate over blocks of variables with the same quantifier
-    while (i < x.size()) {
-      IntVarArgs UW_X;
-      IntVar* uwxi = NULL;
-      TQuantifier qi = EXISTS;
-
-      while (i < x.size())
-      {
-        uwxi = unWatched(x[i]);
-        qi = (uwxi?FORALL:EXISTS);
-
-        if (qi != curQ) break; // End of current block go branching
-        if (qi == EXISTS)
-          UW_X << x[i];
-        else
-          UW_X << *uwxi;
-
-        i++;
-      }
-
-      // Add brancher for unwatched variables
-      using namespace Int;
-      vars.expand(home,UW_X);
-      ViewArray<IntView> xv(home,UW_X);
-      ViewSel<IntView>* vs[1] = {
-        Branch::viewselint(home,vars)
-      };
-      BrancherHandle bh = Branch::QViewValuesOrderBrancher<1,true>::post(home,receiver,xv,sharedInfo.brancherOffset(bh.id()-1),vs,bf,&doubleChoice);
-
-      // Update shared info
-      updateQSpaceInfo(bh,curQ,UW_X);
-
-      result.push_back(bh);
-
-      // Update current quantifier
-      curQ = qi;
-    }
-
-    return result;
-  }
-
-#endif
-
 }
