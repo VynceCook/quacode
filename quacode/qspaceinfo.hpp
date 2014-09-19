@@ -108,14 +108,12 @@ namespace Gecode {
       (*cur).var.id = vId;
       (*cur).var.needNewBlock = false;
       (*cur++).var.nbAlt = 1;
-//ICI      std::cout << "BPtr(" << vId << "," << cur-1-bx << "," << sizeBelow << ")" << std::endl;
        curBranch[curDepth] = BPtr(vId,cur-1,sizeBelow);
     }
   }
 
   forceinline void
   Strategy::addValue(int, int vInf, int vSup) {
-//ICI    std::cout << std::endl;
     BPtr& bPtr = curBranch[curDepth++];
     bPtr.vInf = vInf;
     bPtr.vSup = vSup;
@@ -142,11 +140,9 @@ namespace Gecode {
     switch (lastEvent) {
       case Strategy::FAILURE:
         backtrackFromFailure(vId);
-//ICI        std::cout << "Back to POS: " << cur - bx << std::endl;
         goto branching;
       case Strategy::SUCCESS:
         backtrackFromSuccess(vId);
-//ICI        std::cout << "Back to POS: " << cur - bx << std::endl;
         goto branching;
       case Strategy::NONE:
       case Strategy::CHOICE:
@@ -172,7 +168,6 @@ namespace Gecode {
   StaticExpandStrategy::addValue(int vId, int vInf, int vSup, unsigned int sizeBelow, bool& bForce) {
     // Compute address of value of variable depending on the number of alternative
     if (bForce || ((*cur).var.id != vId)) {
-//ICI      std::cout << "Print var " << vId << " at pos " << cur - bx <<  " and val [" << vInf << "," << vSup << "] at pos " << cur - bx + 1 << (bForce?" forced":"") << std::endl;
       (*cur).var.id = vId;
       (*cur).var.needNewBlock = false;
       (*cur++).var.nbAlt = 1;
@@ -190,7 +185,6 @@ namespace Gecode {
           // If we reach the last alternative we rewrite all
           (*cur).var.nbAlt = 1;
         }
-//ICI        std::cout << "Print var " << vId << " at pos " << cur - bx <<  " and val [" << vInf << "," << vSup << "] at pos " << ptrVal - bx << std::endl;
         cur = ptrVal;
         (*cur).val.leaf = false;
         (*cur).val.inf = vInf;
@@ -198,7 +192,6 @@ namespace Gecode {
         bForce = true;
       } else {
         // Its the same variable and value so we go next one
-//ICI        std::cout << "Unchanged var " << vId << " at pos " << cur - bx << " go further" << std::endl;
         cur = ptrVal + 1;
       }
     }
@@ -337,7 +330,6 @@ namespace Gecode {
         (*cur).nextBlock.ptr = newAllocatedBlock;
         (*cur).nextBlock.size = allocatedBlockSize;
         cur = newAllocatedBlock;
-//ICI        std::cout << "New allocated block of size: " << allocatedBlockSize << std::endl;
       }
 
       sizeBelow = (sizeBelow - 1) / domSize[vId] - 1;
@@ -346,7 +338,6 @@ namespace Gecode {
       (*cur).var.id = vId;
       (*cur).var.needNewBlock = false;
       (*cur++).var.nbAlt = 1;
-//ICI      std::cout << "BPtr(" << vId << "," << cur-1 << "," << sizeBelow << "," << (newAllocatedBlock?"@block":"NULL") << "," << allocatedBlockSize << ")" << std::endl;
        curBranch[curDepth] = BPtr(vId,cur-1,sizeBelow,newAllocatedBlock,allocatedBlockSize);
     }
   }
@@ -437,7 +428,6 @@ namespace Gecode {
       (*cur).nextBlock.ptr = newAllocatedBlock;
       (*cur).nextBlock.size = allocatedBlockSizeBelow;
       cur = newAllocatedBlock;
-//ICI      std::cout << "New allocated block of size: " << allocatedBlockSizeBelow << std::endl;
       bForce = true;
     }
     sizeBelow = (sizeBelow - 1) / domSize[vId] - 1;
@@ -445,7 +435,6 @@ namespace Gecode {
 
     // Compute address of value of variable depending on the number of alternative
     if (bForce || ((*cur).var.id != vId)) {
-//ICI      std::cout << "Print var " << vId << " at pos " << cur - bx <<  " and val [" << vInf << "," << vSup << "] at pos " << cur - bx + 1 << (bForce?" forced":"") << std::endl;
       // Add the current value and variable
       (*cur).var.id = vId;
       (*cur).var.needNewBlock = false;
@@ -486,7 +475,6 @@ namespace Gecode {
             curDepth--;
           }
         }
-//ICI        std::cout << "Print var " << vId << " at pos " << cur - bx <<  " and val [" << vInf << "," << vSup << "] at pos " << ptrVal - bx << std::endl;
         cur = ptrVal;
         (*cur).val.leaf = false;
         (*cur).val.inf = vInf;
@@ -494,7 +482,6 @@ namespace Gecode {
         bForce = true;
       } else {
         // Its the same variable and value so we go next one
-//ICI        std::cout << "Unchanged var " << vId << " at pos " << cur - bx << " go further" << std::endl;
         cur = ptrVal + 1;
         if (cur->var.needNewBlock) {
           sizeBelow = cur->var.nbAlt; // This block doesn't need the nbAlt field, so we use it to store sizeBelow
@@ -545,20 +532,16 @@ namespace Gecode {
 
   forceinline void
   QSpaceInfo::QSpaceSharedInfoO::scenarioSuccess(const QSpaceInfo& qsi) {
-//ICI    std::cout << "ScenarioSuccess() at depth " << s->depth() << std::endl;
     s->scenarioSuccess(qsi);
   }
 
   forceinline void
   QSpaceInfo::QSpaceSharedInfoO::scenarioFailed(void) {
-//ICI    std::cout << "ScenarioFailed() at depth " << s->depth() << std::endl;
     s->scenarioFailed();
   }
 
   forceinline void
   QSpaceInfo::QSpaceSharedInfoO::scenarioChoice(unsigned int id, int pos, int vInf, int vSup) {
-//ICI    if (vInf == vSup) std::cout << "ScenarioChoice(" << id << "," << pos << "," << vInf << "," << vSup << ") <-> v_" << v[id-1].offset + pos << " = " << vInf << std::endl;
-//ICI    else std::cout << "ScenarioChoice(" << id << "," << pos << "," << vInf << "," << vSup << ") <-> v_" << v[id-1].offset + pos << " = [" << vInf << "," << vSup << "]" << std::endl;
     int vId = v[id-1].offset + pos;
     s->scenarioChoice(vId,vInf,vSup);
   }

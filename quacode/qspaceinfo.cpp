@@ -94,7 +94,6 @@ namespace Gecode {
   }
 
   void Strategy::print(std::ostream& os) const {
-//ICI    for (unsigned int i=0; i<strategyTotalSize; i++) std::cout << (bx + i)->val.inf << "/" << (bx + i)->val.sup << "/" << ((bx + i)->val.leaf?"L":"N") << " "; std::cout << std::endl;
     if (bx && (cur != bx)) print(os,bx,strategyTotalSize,0); os << std::endl;
   }
 
@@ -109,7 +108,6 @@ namespace Gecode {
 
   bool DynamicStrategy::strategyInit() {
     assert(bx == NULL);
-//ICI    std::cout << "Init branch size: " << curBranch.size() << std::endl;
     strategyTotalSize = 0;
     int k = domSize.size();
     for (int i = k; i--; )
@@ -130,7 +128,6 @@ namespace Gecode {
     }
     bx = new (std::nothrow) Box[bxBlockSize];
     cur = bx;
-//ICI    std::cout << "BlockSize: " << bxBlockSize << ", StrategyTotalSize: " << strategyTotalSize << ", k: " << k+1 << std::endl;
     return (bx != NULL);
   }
 
@@ -163,16 +160,6 @@ namespace Gecode {
   void DynamicStrategy::print(std::ostream& os, Box* p, unsigned int curRemainingBlockSize, int depth) const {
     if (p->var.needNewBlock) {
       p++;
-//ICI      bool bFlag = false;
-//ICI      for (unsigned int i=0; i<p->nextBlock.size; i++) {
-//ICI        if (bFlag)
-//ICI          std::cout << "@" << (p->nextBlock.ptr + i)->nextBlock.ptr << "(" << (p->nextBlock.ptr + i)->nextBlock.size << ") ";
-//ICI        else
-//ICI          std::cout << (p->nextBlock.ptr + i)->val.inf << "/" << (p->nextBlock.ptr + i)->val.sup << "/" << ((p->nextBlock.ptr + i)->val.leaf?"L":"N") << " ";
-//ICI        if ((p->nextBlock.ptr + i)->var.id == -1) bFlag = true;
-//ICI        else bFlag = false;
-//ICI      }
-//ICI      std::cout << std::endl;
       print(os,p->nextBlock.ptr,p->nextBlock.size,depth);
       return;
     }
@@ -200,7 +187,6 @@ namespace Gecode {
   }
 
   void DynamicStrategy::print(std::ostream& os) const {
-//ICI    for (unsigned int i=0; i<bxBlockSize; i++) std::cout << (bx + i)->val.inf << "/" << (bx + i)->val.sup << "/" << ((bx + i)->val.leaf?"L":"N") << " "; std::cout << std::endl;
     if (bx && (cur != bx)) print(os,bx,bxBlockSize,0); os << std::endl;
   }
 
@@ -266,12 +252,10 @@ namespace Gecode {
       if (sm & StrategyMethodValues::DYNAMIC) {
         LABEL_PREFER_DYNAMIC:
         if (!s->strategyInit()) goto LABEL_NO_BUILD;
-//ICI        std::cout << "Build dynamic strategy" << std::endl;
       } else {
         assert((dynamic_cast<Strategy*>(s) != NULL) || (dynamic_cast<StaticExpandStrategy*>(s) != NULL));
         if (!s->strategyInit()) {
           if (sm & StrategyMethodValues::FAILTHROUGH) {
-//ICI            std::cout << "Change to dynamic strategy" << std::endl;
             sm = sm | StrategyMethodValues::DYNAMIC;
             Strategy *_s = NULL;
             if (sm & StrategyMethodValues::EXPAND)
@@ -283,11 +267,9 @@ namespace Gecode {
             goto LABEL_PREFER_DYNAMIC;
           } else goto LABEL_NO_BUILD;
         }
-//ICI        std::cout << "Build static strategy" << ((sm & StrategyMethodValues::EXPAND)?" expanded":"") << std::endl;
       }
     } else {
       LABEL_NO_BUILD:
-//ICI      std::cout << "Strategy will be not built" << std::endl;
       delete s;
       s = NULL;
       sm = 0; // No build

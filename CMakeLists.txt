@@ -133,25 +133,6 @@ ELSE (NOT GECODE_FOUND)
     examples/connect-four.cpp
     examples/baker.cpp
   )
-  SET(FLATZINC_HEADERS
-    quacode/flatzinc.hh
-    quacode/flatzinc/ast.hh
-    quacode/flatzinc/conexpr.hh
-    quacode/flatzinc/flatzinc.hh
-    quacode/flatzinc/option.hh
-    quacode/flatzinc/plugin.hh
-    quacode/flatzinc/registry.hh
-    quacode/flatzinc/symboltable.hh
-    quacode/flatzinc/varspec.hh
-  )
-  SET(FLATZINC_HPP
-  )
-  SET(FLATZINC_SRCS
-    quacode/flatzinc/fzn-quacode.cpp
-    quacode/flatzinc/flatzinc.cpp
-    quacode/flatzinc/registry.cpp
-  )
-
 
   SOURCE_GROUP("Hpp Files" REGULAR_EXPRESSION ".hpp")
 
@@ -172,39 +153,6 @@ ELSE (NOT GECODE_FOUND)
   ELSE()
     SET(QCSP_LIB quacode)
   ENDIF()
-
-  # Add target for Quacode/FlatZinc
-  FIND_PACKAGE(BISON 3.0.0)
-  FIND_PACKAGE(FLEX)
-  IF (BISON_FOUND AND FLEX_FOUND)
-    BISON_TARGET(FLATZINCPARSER quacode/flatzinc/parser.yxx ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
-    FLEX_TARGET(FLATZINCSCANNER quacode/flatzinc/lexer.lxx  ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
-    ADD_FLEX_BISON_DEPENDENCY(FLATZINCSCANNER FLATZINCPARSER)
-    ADD_EXECUTABLE(qfzn-quacode ${FLATZINC_SRCS} ${BISON_FLATZINCPARSER_OUTPUTS} ${FLEX_FLATZINCSCANNER_OUTPUTS})
-    FIND_PACKAGE(Qt4 4.4 COMPONENTS QtCore)
-    IF (QT_FOUND)
-      GET_PROPERTY(DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-      SET(DIRS ${DIRS} ${QT_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
-      SET_TARGET_PROPERTIES(qfzn-quacode PROPERTIES INCLUDE_DIRECTORIES "${DIRS}")
-      TARGET_LINK_LIBRARIES(qfzn-quacode ${QCSP_LIB} ${GECODE_LIBRARIES} ${QT_QTCORE_LIBRARY} pthread)
-    ELSE()
-      TARGET_LINK_LIBRARIES(qfzn-quacode ${QCSP_LIB} ${GECODE_LIBRARIES} pthread)
-    ENDIF()
-
-    # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
-    # to remove the additional -bdynamic from the linker line.
-    IF(STATIC_LINKING)
-      SET(CMAKE_EXE_LINKER_FLAGS "-static")
-      SET_TARGET_PROPERTIES(qfzn-quacode PROPERTIES LINK_SEARCH_END_STATIC 1)
-    ENDIF(STATIC_LINKING)
-
-    IF (BUILD_SHARED_LIBS)
-      ADD_DEPENDENCIES(qfzn-quacode quacode )
-    ENDIF()
-  ELSE()
-    MESSAGE(STATUS "Can't find Flex and Bison, QFlatZinc will be not built.")
-  ENDIF()
-
 
   # Add targets for examples
   FOREACH (example ${QCSP_EXAMPLES_SRCS})

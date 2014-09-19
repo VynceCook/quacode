@@ -80,32 +80,13 @@ namespace Gecode { namespace Int {
 
   template<class View>
   ExecStatus
-  Watch<View>::propagate(Space& home, const ModEventDelta& /*ICI med*/) {
+  Watch<View>::propagate(Space& home, const ModEventDelta&) {
     if (x0.size() != x0Size) return ES_FAILED;
     if (x1.assigned()) {
       GECODE_ME_CHECK(x0.eq(home,x1.val()));
       dynamic_cast<QSpaceInfo&>((Space&)home).delWatchConstraint();
       return home.ES_SUBSUMED(*this);
     }
-//ICI    if (View::me(med) != ME_INT_DOM) {
-//ICI      do {
-//ICI        GECODE_ME_CHECK(x0.gq(home,x1.min()));
-//ICI        GECODE_ME_CHECK(x1.gq(home,x0.min()));
-//ICI      } while (x0.min() != x1.min());
-//ICI      do {
-//ICI        GECODE_ME_CHECK(x0.lq(home,x1.max()));
-//ICI        GECODE_ME_CHECK(x1.lq(home,x0.max()));
-//ICI      } while (x0.max() != x1.max());
-//ICI      if (x0.assigned()) {
-//ICI        dynamic_cast<QSpaceInfo&>((Space&)home).delWatchConstraint();
-//ICI        return home.ES_SUBSUMED(*this);
-//ICI      }
-//ICI      assert(x0.size() == x1.size());
-//ICI      x0Size = x0.size();
-//ICI      if (x0.range() && x1.range())
-//ICI        return ES_FIX;
-//ICI      return home.ES_FIX_PARTIAL(*this,View::med(ME_INT_DOM));
-//ICI    }
     ViewRanges<View> r0(x0);
     GECODE_ME_CHECK(x1.inter_r(home,r0,shared(x0,x1)));
     ViewRanges<View> r1(x1);
