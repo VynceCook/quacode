@@ -3,3 +3,16 @@ Quacode is a quantified constraint satisfaction problems (QCSP) solver based on 
 Quacode have been developped by Vincent Barichard. More info is available on
 http://quacode.barichard.com
 
+To compile Quacode, you have to install cmake. To setup the compilation process
+for your environment, you can launch cmake by invoking
+  cmake .
+in the toplevel Quacode directory.
+
+Then you can compile the code by invoking
+  make
+in the toplevel Quacode directory.
+
+After a successful compilation, you can install Quacode library and examples by
+invoking
+  make install
+in the build directory.
