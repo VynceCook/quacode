@@ -55,6 +55,7 @@ ENDIF(STATIC_LINKING)
 SET(CMAKE_VERBOSE_MAKEFILE TRUE)
 SET(GECODE_SRC "${CMAKE_SOURCE_DIR}" CACHE PATH "Path where GeCode source is installed")
 SET(GECODE_BIN "${GECODE_SRC}" CACHE PATH "Path where GeCode libs and binaries are installed")
+SET(BUILD_EXAMPLES ON CACHE BOOL "Build examples or not")
 
 SET(LOG_AUDIT FALSE CACHE BOOL "Set to true to generate log output in parallel qcsp algorithm")
 
@@ -155,22 +156,24 @@ ELSE (NOT GECODE_FOUND)
     SET(QUACODE_LIBRARIES quacode)
   ENDIF()
 
-  # Add targets for examples
-  FOREACH (example ${QUACODE_EXAMPLES_SRCS})
-    GET_FILENAME_COMPONENT(exampleBin ${example} NAME_WE)
-    ADD_EXECUTABLE(${exampleBin} ${example})
-    TARGET_LINK_LIBRARIES(${exampleBin} ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} pthread)
+  IF(BUILD_EXAMPLES)
+    # Add targets for examples
+    FOREACH (example ${QUACODE_EXAMPLES_SRCS})
+      GET_FILENAME_COMPONENT(exampleBin ${example} NAME_WE)
+      ADD_EXECUTABLE(${exampleBin} ${example})
+      TARGET_LINK_LIBRARIES(${exampleBin} ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} pthread)
 
-    # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
-    # to remove the additional -bdynamic from the linker line.
-    IF(STATIC_LINKING)
-        SET(CMAKE_EXE_LINKER_FLAGS "-static")
-        SET_TARGET_PROPERTIES(${exampleBin} PROPERTIES LINK_SEARCH_END_STATIC 1)
-    ENDIF(STATIC_LINKING)
+      # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
+      # to remove the additional -bdynamic from the linker line.
+      IF(STATIC_LINKING)
+          SET(CMAKE_EXE_LINKER_FLAGS "-static")
+          SET_TARGET_PROPERTIES(${exampleBin} PROPERTIES LINK_SEARCH_END_STATIC 1)
+      ENDIF(STATIC_LINKING)
 
-    IF (BUILD_SHARED_LIBS)
-      ADD_DEPENDENCIES(${exampleBin} quacode)
-    ENDIF()
-  ENDFOREACH ()
+      IF (BUILD_SHARED_LIBS)
+        ADD_DEPENDENCIES(${exampleBin} quacode)
+      ENDIF()
+    ENDFOREACH ()
+  ENDIF(BUILD_EXAMPLES)
 
 ENDIF(NOT GECODE_FOUND)
