@@ -1,0 +1,5 @@
+Quacode is a quantified constraint satisfaction problems (QCSP) solver based on Gecode.
+
+Quacode have been developped by Vincent Barichard. More info is available on
+http://quacode.barichard.com
+
