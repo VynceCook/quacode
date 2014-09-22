@@ -46,7 +46,7 @@
 #if !defined(GECODE_STATIC_LIBS) && \
     (defined(__CYGWIN__) || defined(__MINGW32__) || defined(_MSC_VER))
 
-#ifdef GECODE_BUILD_QCSP
+#ifdef GECODE_BUILD_QUACODE
 #define GECODE_QCSP_EXPORT __declspec( dllexport )
 #else
 #define GECODE_QCSP_EXPORT __declspec( dllimport )

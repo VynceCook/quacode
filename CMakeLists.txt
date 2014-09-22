@@ -66,6 +66,7 @@ FIND_PACKAGE(Gecode)
 IF(NOT GECODE_FOUND)
   MESSAGE(FATAL_ERROR "Gecode is needed, consider to install it")
 ELSE (NOT GECODE_FOUND)
+  SET(GECODE_LIBRARIES ${GECODE_LIBRARIES} PARENT_SCOPE) # For use as subproject
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
   INCLUDE_DIRECTORIES(${GECODE_BIN})
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -82,6 +83,10 @@ ELSE (NOT GECODE_FOUND)
     SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb")
   ENDIF ()
 
+  IF (LOG_AUDIT)
+    ADD_DEFINITIONS(-DLOG_AUDIT)
+  ENDIF()
+
   check_cxx_compiler_flag(-fvisibility=hidden HAVE_VISIBILITY_HIDDEN_FLAG)
   IF (HAVE_VISIBILITY_HIDDEN_FLAG)
     SET(GECODE_GCC_HAS_CLASS_VISIBILITY "/**/")
@@ -94,7 +99,7 @@ ELSE (NOT GECODE_FOUND)
     SET(GECODE_THREADS_PTHREADS 1)
   ENDIF ()
 
-  SET(QCSP_LIB_HEADERS
+  SET(QUACODE_HEADERS
     quacode/qcsp.hh
     quacode/qspaceinfo.hh
     quacode/support/dynamic-list.hh
@@ -103,7 +108,7 @@ ELSE (NOT GECODE_FOUND)
     quacode/search/sequential/qdfs.hh
     quacode/qint/qbool.hh
   )
-  SET(QCSP_LIB_HPP
+  SET(QUACODE_HPP
     quacode/qspaceinfo.hpp
     quacode/search/qdfs.hpp
     quacode/qint/watch.hpp
@@ -114,7 +119,7 @@ ELSE (NOT GECODE_FOUND)
     quacode/qint/qbool/xor.hpp
     quacode/qint/qbool/xorv.hpp
   )
-  SET(QCSP_LIB_SRCS
+  SET(QUACODE_SRCS
     quacode/qspaceinfo.cpp
     quacode/support/log.cpp
     quacode/search/qdfs.cpp
@@ -125,7 +130,7 @@ ELSE (NOT GECODE_FOUND)
     ${GECODE_SRC}/gecode/search/parallel/engine.cpp
     ${GECODE_SRC}/gecode/search/parallel/path.cpp
   )
-  SET(QCSP_EXAMPLES_SRCS
+  SET(QUACODE_EXAMPLES_SRCS
     examples/qbf.cpp
     examples/qdimacs.cpp
     examples/nim-fibo.cpp
@@ -141,24 +146,20 @@ ELSE (NOT GECODE_FOUND)
 
   SET(EXTRA_SRCS "")
 
-  IF (LOG_AUDIT)
-    ADD_DEFINITIONS(-DLOG_AUDIT)
-  ENDIF()
-
-  ADD_LIBRARY(quacode ${QCSP_LIB_SRCS} ${EXTRA_SRCS} ${QCSP_LIB_HEADERS} ${QCSP_LIB_HPP})
-  SET_TARGET_PROPERTIES(quacode PROPERTIES DEFINE_SYMBOL  "GECODE_BUILD_QCSP")
-  SET(QCSP_LIB "")
+  ADD_LIBRARY(quacode ${QUACODE_SRCS} ${EXTRA_SRCS} ${QUACODE_HEADERS} ${QUACODE_HPP})
+  SET_TARGET_PROPERTIES(quacode PROPERTIES DEFINE_SYMBOL "GECODE_BUILD_QUACODE")
+  SET(QUACODE_LIBRARIES "" PARENT_SCOPE)
   IF (BUILD_SHARED_LIBS)
-    SET(QCSP_LIB -L${CMAKE_CURRENT_BINARY_DIR} -lquacode)
+    SET(QUACODE_LIBRARIES -L${CMAKE_CURRENT_BINARY_DIR} -lquacode)
   ELSE()
-    SET(QCSP_LIB quacode)
+    SET(QUACODE_LIBRARIES quacode)
   ENDIF()
 
   # Add targets for examples
-  FOREACH (example ${QCSP_EXAMPLES_SRCS})
+  FOREACH (example ${QUACODE_EXAMPLES_SRCS})
     GET_FILENAME_COMPONENT(exampleBin ${example} NAME_WE)
     ADD_EXECUTABLE(${exampleBin} ${example})
-    TARGET_LINK_LIBRARIES(${exampleBin} ${QCSP_LIB} ${GECODE_LIBRARIES} pthread)
+    TARGET_LINK_LIBRARIES(${exampleBin} ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} pthread)
 
     # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
     # to remove the additional -bdynamic from the linker line.
@@ -168,10 +169,8 @@ ELSE (NOT GECODE_FOUND)
     ENDIF(STATIC_LINKING)
 
     IF (BUILD_SHARED_LIBS)
-      ADD_DEPENDENCIES(${exampleBin} quacode )
+      ADD_DEPENDENCIES(${exampleBin} quacode)
     ENDIF()
   ENDFOREACH ()
-
-  # Add targets for examples which need threads and SIBUS
 
 ENDIF(NOT GECODE_FOUND)
