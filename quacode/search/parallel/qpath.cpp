@@ -2,9 +2,11 @@
 /*
  *  Main authors:
  *     Vincent Barichard <Vincent.Barichard@univ-angers.fr>
+ *     Christian Schulte <schulte@gecode.org>
  *
  *  Copyright:
  *     Vincent Barichard, 2013
+ *     Christian Schulte, 2013
  *
  *  Last modified:
  *     $Date$ by $Author$
@@ -34,28 +36,18 @@
  *
  */
 
-#include <quacode/qcsp.hh>
+#include <quacode/search/parallel/qpath.hh>
 
-#include <quacode/search/sequential/qdfs.hh>
 #ifdef GECODE_HAS_THREADS
-#include <quacode/search/parallel/qdfs.hh>
-#endif
 
-namespace Gecode { namespace Search {
+namespace Gecode { namespace Search { namespace Parallel {
 
-    Engine*
-    qdfs(Space* s, const Options& o) {
-#ifdef GECODE_HAS_THREADS
-    Options to = o.expand();
-    if (to.threads == 1.0)
-      return new WorkerToEngine<Sequential::QDFS>(s,to);
-    else
-      return new Parallel::QDFS(s,to);
-#else
-    return new WorkerToEngine<Sequential::QDFS>(s,o);
-#endif
-    }
+  void
+  QPath::post(Space& home) {
+    GECODE_ES_FAIL(Meta::NoGoodsProp::post(home,*this));
   }
-}
 
-// STATISTICS: search-other
+}}}
+
+#endif
+// STATISTICS: search-parallel
