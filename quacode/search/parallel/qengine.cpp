@@ -34,28 +34,23 @@
  *
  */
 
-#include <quacode/qcsp.hh>
+#include <gecode/support.hh>
 
-#include <quacode/search/sequential/qdfs.hh>
 #ifdef GECODE_HAS_THREADS
-#include <quacode/search/parallel/qdfs.hh>
+
+#include <quacode/search/parallel/qengine.hh>
+
+namespace Gecode { namespace Search { namespace Parallel {
+
+
+  /*
+   * Termination and deletion
+   */
+  QEngine::QWorker::~QWorker(void) { }
+
+  QEngine::~QEngine(void) { }
+
+
+}}}
+
 #endif
-
-namespace Gecode { namespace Search {
-
-    Engine*
-    qdfs(Space* s, const Options& o) {
-#ifdef GECODE_HAS_THREADS
-    Options to = o.expand();
-    if (to.threads == 1.0)
-      return new WorkerToEngine<Sequential::QDFS>(s,to);
-    else
-      return new Parallel::QDFS(s,to);
-#else
-    return new WorkerToEngine<Sequential::QDFS>(s,o);
-#endif
-    }
-  }
-}
-
-// STATISTICS: search-other
