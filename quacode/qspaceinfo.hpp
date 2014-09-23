@@ -753,6 +753,7 @@ namespace Gecode {
     for (int i=0; i < _watchedBoolVariables.size(); i++)
       if (_watchedBoolVariables[i].same(x)) return _unWatchedBoolVariables[i];
     GECODE_NEVER;
+    return x; // Only for removing warning when compilation mode is Release
   }
 
   forceinline IntVar
@@ -760,6 +761,7 @@ namespace Gecode {
     for (int i=0; i < _watchedIntVariables.size(); i++)
       if (_watchedIntVariables[i].same(x)) return _unWatchedIntVariables[i];
     GECODE_NEVER;
+    return x; // Only for removing warning when compilation mode is Release
   }
 
   forceinline BoolVar*

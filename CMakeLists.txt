@@ -34,7 +34,40 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+SET(GECODE_SRC "${CMAKE_SOURCE_DIR}/../.." CACHE PATH "Path where GeCode source is installed")
+SET(GECODE_BIN "${GECODE_SRC}" CACHE PATH "Path where GeCode libs and binaries are installed")
+SET(BUILD_EXAMPLES ON CACHE BOOL "Build examples or not")
+
+# If the user specifies -DCMAKE_BUILD_TYPE on the command line, take their definition
+# and dump it in the cache along with proper documentation, otherwise set CMAKE_BUILD_TYPE
+# to Debug prior to calling PROJECT()
+#
+IF(DEFINED CMAKE_BUILD_TYPE)
+   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.")
+ELSE()
+  # Check if Gecode is configured with --enable-debug
+  FILE(STRINGS ${GECODE_BIN}/config.status GECODE_DEBUG_BUILD REGEX "S\\[\"DEBUG_BUILD\"\\]=")
+  IF(GECODE_DEBUG_BUILD MATCHES "yes")
+    SET(QUACODE_BUILD_TYPE "Debug")
+  ELSE()
+    SET(QUACODE_BUILD_TYPE "Release")
+  ENDIF()
+
+   SET(CMAKE_BUILD_TYPE "${QUACODE_BUILD_TYPE}" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.")
+ENDIF()
+
 PROJECT(Quacode)
+
+SET(CMAKE_VERBOSE_MAKEFILE TRUE)
+
+# Check if Gecode is configured with --enable-audit
+FILE(STRINGS ${GECODE_BIN}/config.status GECODE_AUDIT REGEX "D\\[\"GECODE_AUDIT\"\\]=")
+IF(GECODE_AUDIT)
+  SET(QUACODE_AUDIT TRUE)
+ELSE()
+  SET(QUACODE_AUDIT FALSE)
+ENDIF()
+SET(LOG_AUDIT ${QUACODE_AUDIT} CACHE BOOL "Set to true to generate log output in parallel qcsp algorithm")
 
 # determine, whether we want a static binary
 SET(STATIC_LINKING FALSE CACHE BOOL "Build a static binary?")
@@ -52,16 +85,8 @@ IF(STATIC_LINKING)
     SET(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(STATIC_LINKING)
 
-SET(CMAKE_VERBOSE_MAKEFILE TRUE)
-SET(GECODE_SRC "${CMAKE_SOURCE_DIR}" CACHE PATH "Path where GeCode source is installed")
-SET(GECODE_BIN "${GECODE_SRC}" CACHE PATH "Path where GeCode libs and binaries are installed")
-SET(BUILD_EXAMPLES ON CACHE BOOL "Build examples or not")
-
-SET(LOG_AUDIT FALSE CACHE BOOL "Set to true to generate log output in parallel qcsp algorithm")
-
 INCLUDE(CheckCXXCompilerFlag)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_MODULE_PATH})
-
 FIND_PACKAGE(Gecode)
 
 IF(NOT GECODE_FOUND)
