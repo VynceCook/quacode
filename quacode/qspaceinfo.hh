@@ -416,15 +416,18 @@ namespace Gecode {
       forceinline TQuantifier brancherQuantifier(unsigned int id) const { return v[id-1].quantifier; }
       /// Return the offset computed when the brancher \a bh was added
       forceinline unsigned int brancherOffset(const unsigned int id) const { return v[id-1].offset; }
+      // Return the last id of brancher stored in Shared Info.
+      // Return -1 if not brancher recorded.
+      forceinline int getLastBrancherId(void) const { return v.size()-1; }
 
       /// Initialize data structures of strategy, may return another method if strategy can't be allocated with given method
       StrategyMethod strategyInit(StrategyMethod sm);
       /// Clear all data of the current strategy (used when search algorithm resets as well)
-      void strategyReset();
+      void strategyReset(void);
       /// Print the current strategy
       void strategyPrint(std::ostream& os) const;
       /// Called when a failed scenario was found
-      void scenarioFailed();
+      void scenarioFailed(void);
       /// Called when a successful scenario was found
       void scenarioSuccess(const QSpaceInfo& qsi);
       /// Record a new choice event in the scenario, for brancher id \a id,
@@ -433,7 +436,7 @@ namespace Gecode {
 
       // Return the vector of link between the id of variable in the binder and the
       // id of the same variable in its specific data structure
-      const std::vector<LkBinderVarObj>& linkIdVars() const;
+      const std::vector<LkBinderVarObj>& linkIdVars(void) const;
     };
 
     class QSpaceSharedInfo : public SharedHandle {
@@ -456,11 +459,11 @@ namespace Gecode {
         /// Initialize data structures of strategy, may return another method if strategy can't be allocated with given method
         StrategyMethod strategyInit(StrategyMethod sm);
         /// Clear all data of the current strategy (used when search algorithm resets as well)
-        void strategyReset();
+        void strategyReset(void);
         /// Print the current strategy
         void strategyPrint(std::ostream& os) const;
         /// Called when a failed scenario was found
-        void scenarioFailed();
+        void scenarioFailed(void);
         /// Called when no strategy has been found (failed problem)
         void scenarioSuccess(const QSpaceInfo& qsi);
         /// Called when a successful scenario was found
@@ -468,9 +471,12 @@ namespace Gecode {
         // variable position \a pos and value [ \a vInf , \a vSup ]
         void scenarioChoice(unsigned int id, int pos, int vInf, int vSup);
 
+        // Return the last id of brancher stored in Shared Info.
+        // Return -1 if not brancher recorded.
+        int getLastBrancherId(void) const;
         // Return the vector of link between the id of variable in the binder and the
         // id of the same variable in its specific data structure
-        const std::vector<LkBinderVarObj>& linkIdVars() const;
+        const std::vector<LkBinderVarObj>& linkIdVars(void) const;
     };
 
     /// Wrapper function to record choice in scenario

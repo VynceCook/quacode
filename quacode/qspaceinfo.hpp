@@ -547,7 +547,7 @@ namespace Gecode {
   }
 
   forceinline const std::vector<QSpaceInfo::LkBinderVarObj>&
-  QSpaceInfo::QSpaceSharedInfoO::linkIdVars() const {
+  QSpaceInfo::QSpaceSharedInfoO::linkIdVars(void) const {
     return _linkIdVars;
   }
 
@@ -588,11 +588,16 @@ namespace Gecode {
 
   forceinline unsigned int
   QSpaceInfo::QSpaceSharedInfo::brancherOffset(unsigned int id) const {
-    return static_cast<QSpaceSharedInfoO*>(object())->brancherQuantifier(id);
+    return static_cast<QSpaceSharedInfoO*>(object())->brancherOffset(id);
+  }
+
+  forceinline int
+  QSpaceInfo::QSpaceSharedInfo::getLastBrancherId(void) const {
+    return static_cast<QSpaceSharedInfoO*>(object())->getLastBrancherId();
   }
 
   forceinline const std::vector<QSpaceInfo::LkBinderVarObj>&
-  QSpaceInfo::QSpaceSharedInfo::linkIdVars() const {
+  QSpaceInfo::QSpaceSharedInfo::linkIdVars(void) const {
     return static_cast<QSpaceSharedInfoO*>(object())->linkIdVars();
   }
 
