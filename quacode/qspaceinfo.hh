@@ -417,8 +417,8 @@ namespace Gecode {
       /// Return the offset computed when the brancher \a bh was added
       forceinline unsigned int brancherOffset(const unsigned int id) const { return v[id-1].offset; }
       // Return the last id of brancher stored in Shared Info.
-      // Return -1 if not brancher recorded.
-      forceinline int getLastBrancherId(void) const { return v.size()-1; }
+      // Return 0 if no brancher recorded.
+      forceinline int getLastBrancherId(void) const { return v.size(); }
 
       /// Initialize data structures of strategy, may return another method if strategy can't be allocated with given method
       StrategyMethod strategyInit(StrategyMethod sm);
