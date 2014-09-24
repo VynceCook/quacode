@@ -157,6 +157,8 @@ ELSE (NOT GECODE_FOUND)
     quacode/search/sequential/qpath.cpp
     quacode/qint/qbool/qbool.cpp
     ${GECODE_SRC}/gecode/search/meta/nogoods.cpp
+    ${GECODE_SRC}/gecode/search/parallel/engine.cpp
+    ${GECODE_SRC}/gecode/search/parallel/path.cpp
   )
   SET(QUACODE_EXAMPLES_SRCS
     examples/qbf.cpp
