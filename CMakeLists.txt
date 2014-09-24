@@ -67,7 +67,7 @@ IF(GECODE_AUDIT)
 ELSE()
   SET(QUACODE_AUDIT FALSE)
 ENDIF()
-SET(LOG_AUDIT ${QUACODE_AUDIT} CACHE BOOL "Set to true to generate log output in parallel qcsp algorithm")
+SET(LOG_AUDIT ${QUACODE_AUDIT} CACHE BOOL "Set to true to generate log output.")
 
 # determine, whether we want a static binary
 SET(STATIC_LINKING FALSE CACHE BOOL "Build a static binary?")
@@ -152,8 +152,6 @@ ELSE (NOT GECODE_FOUND)
     quacode/qint/qbool/eqv.cpp
     quacode/qint/qbool/qbool.cpp
     ${GECODE_SRC}/gecode/search/meta/nogoods.cpp
-    ${GECODE_SRC}/gecode/search/parallel/engine.cpp
-    ${GECODE_SRC}/gecode/search/parallel/path.cpp
   )
   SET(QUACODE_EXAMPLES_SRCS
     examples/qbf.cpp
