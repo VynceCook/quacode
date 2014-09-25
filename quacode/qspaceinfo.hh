@@ -99,7 +99,7 @@ namespace Gecode {
   // The storage of strategy is not obvious, for previous example, it will be:
   // |id(x)|v1(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|v2(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|v3(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|
   // Forward declaration
-  class Strategy {
+  class QUACODE_EXPORT Strategy {
   friend class DynamicStrategy;
   friend class DynamicExpandStrategy;
   friend class StrategyExplore;
@@ -217,7 +217,7 @@ namespace Gecode {
   // are expanded.
   // For static expanded strategy, some data structures of Strategy are unused. For example
   // curBranch is not needed as we don't need to know about the backtrack
-  class StaticExpandStrategy : public Strategy {
+  class QUACODE_EXPORT StaticExpandStrategy : public Strategy {
     // Copy constructor
     StaticExpandStrategy(const StaticExpandStrategy& s);
 
@@ -252,7 +252,7 @@ namespace Gecode {
   // So it may increases computing time. But it does not require to allocate the
   // full strategy in memory, so it may be uses to store strategies which cannot be
   // stored with full tree, but are smaller because sub-trees are cut during the search.
-  class DynamicStrategy : public Strategy {
+  class QUACODE_EXPORT DynamicStrategy : public Strategy {
     // Print current strategy
     void print(std::ostream& os, Box* p, unsigned int curRemainingBlockSize, int depth) const;
 
@@ -309,7 +309,7 @@ namespace Gecode {
   // are expanded.
   // For dynamic expanded strategy, we use the curBranch data structure to store the blocks
   // allowed. These blocks will be freed when backtrack because of failure
-  class DynamicExpandStrategy : public DynamicStrategy {
+  class QUACODE_EXPORT DynamicExpandStrategy : public DynamicStrategy {
     // Copy constructor
     DynamicExpandStrategy(const DynamicExpandStrategy& s);
     // Convert constructor
@@ -370,7 +370,7 @@ namespace Gecode {
     };
 
 
-  class QSpaceInfo {
+  class QUACODE_EXPORT QSpaceInfo {
   friend class StaticExpandStrategy;
   friend class DynamicExpandStrategy;
   template<class View> friend class ::Gecode::Int::Watch;
@@ -439,7 +439,7 @@ namespace Gecode {
       const std::vector<LkBinderVarObj>& linkIdVars(void) const;
     };
 
-    class QSpaceSharedInfo : public SharedHandle {
+    class QUACODE_EXPORT QSpaceSharedInfo : public SharedHandle {
       public:
         /// Constructor
         QSpaceSharedInfo(void);

@@ -38,7 +38,7 @@ namespace Gecode {
 
   namespace Search {
     /// Create depth-first engine for quantified variables
-    GECODE_QCSP_EXPORT Engine* qdfs(Space* s, const Options& o);
+    QUACODE_EXPORT Engine* qdfs(Space* s, const Options& o);
   }
 
   template<class T>

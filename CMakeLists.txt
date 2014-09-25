@@ -42,9 +42,7 @@ SET(BUILD_EXAMPLES ON CACHE BOOL "Build examples or not")
 # and dump it in the cache along with proper documentation, otherwise set CMAKE_BUILD_TYPE
 # to Debug prior to calling PROJECT()
 #
-IF(DEFINED CMAKE_BUILD_TYPE)
-   SET(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.")
-ELSE()
+IF(NOT DEFINED CMAKE_BUILD_TYPE)
   # Check if Gecode is configured with --enable-debug
   FILE(STRINGS ${GECODE_BIN}/config.status GECODE_DEBUG_BUILD REGEX "S\\[\"DEBUG_BUILD\"\\]=")
   IF(GECODE_DEBUG_BUILD MATCHES "yes")
@@ -69,10 +67,14 @@ ELSE()
 ENDIF()
 SET(LOG_AUDIT ${QUACODE_AUDIT} CACHE BOOL "Set to true to generate log output.")
 
-# determine, whether we want a static binary
-SET(STATIC_LINKING FALSE CACHE BOOL "Build a static binary?")
-# do we want static libraries?
-IF(STATIC_LINKING)
+IF(UNIX)
+  # determine, whether we want a static binary
+  SET(STATIC_LINKING FALSE CACHE BOOL "Build a static binary?")
+  # do we want static libraries?
+  IF(STATIC_LINKING)
+    SET(BUILD_SHARED_LIBS OFF)
+    # To know in source file that we compil static
+    ADD_DEFINITIONS(-DQUACODE_STATIC_LIBS)
     # When STATIC_LINKING is TRUE, than cmake looks for libraries ending
     # with .a. This is for linux only!
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
@@ -83,9 +85,13 @@ IF(STATIC_LINKING)
     # Use static libs for Boost
     SET(Boost_USE_STATIC_LIBS ON)
     SET(Boost_USE_STATIC_RUNTIME ON)
-ENDIF(STATIC_LINKING)
+  ELSE(STATIC_LINKING)
+    SET(BUILD_SHARED_LIBS ON)
+  ENDIF(STATIC_LINKING)
+ELSE(UNIX)
+  SET(BUILD_SHARED_LIBS ON)
+ENDIF(UNIX)
 
-INCLUDE(CheckCXXCompilerFlag)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 FIND_PACKAGE(Gecode)
 
@@ -96,6 +102,9 @@ ELSE (NOT GECODE_FOUND)
   INCLUDE_DIRECTORIES(${GECODE_BIN})
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
   INCLUDE_DIRECTORIES(${GECODE_SRC})
+
+  LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+  LINK_DIRECTORIES(${GECODE_BIN})
 
   IF (CMAKE_COMPILER_IS_GNUCXX)
     ADD_DEFINITIONS(-Wall)
@@ -112,17 +121,14 @@ ELSE (NOT GECODE_FOUND)
     ADD_DEFINITIONS(-DLOG_AUDIT)
   ENDIF()
 
+  INCLUDE(CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-fvisibility=hidden HAVE_VISIBILITY_HIDDEN_FLAG)
   IF (HAVE_VISIBILITY_HIDDEN_FLAG)
-    SET(GECODE_GCC_HAS_CLASS_VISIBILITY "/**/")
     ADD_DEFINITIONS(-fvisibility=hidden)
+    ADD_DEFINITIONS(-DQUACODE_GCC_HAS_CLASS_VISIBILITY)
   ENDIF()
 
-  IF (WIN32)
-    SET(GECODE_THREADS_WINDOWS 1)
-  ELSE ()
-    SET(GECODE_THREADS_PTHREADS 1)
-  ENDIF ()
+  FIND_PACKAGE(Threads)
 
   SET(QUACODE_HEADERS
     quacode/qcsp.hh
@@ -168,31 +174,22 @@ ELSE (NOT GECODE_FOUND)
   SET_SOURCE_FILES_PROPERTIES(${ALL_HPP} PROPERTIES HEADER_FILE_ONLY TRUE)
 
   ADD_LIBRARY(quacode ${QUACODE_SRCS} ${QUACODE_HEADERS} ${QUACODE_HPP})
-  SET_TARGET_PROPERTIES(quacode PROPERTIES DEFINE_SYMBOL "GECODE_BUILD_QUACODE")
-  SET(QUACODE_LIBRARIES "")
-  IF (BUILD_SHARED_LIBS)
-    SET(QUACODE_LIBRARIES -L${CMAKE_CURRENT_BINARY_DIR} -lquacode)
-  ELSE()
-    SET(QUACODE_LIBRARIES quacode)
-  ENDIF()
+  SET_TARGET_PROPERTIES(quacode PROPERTIES COMPILE_DEFINITIONS "BUILD_QUACODE_LIB")
+  SET(QUACODE_LIBRARIES quacode)
 
   IF(BUILD_EXAMPLES)
     # Add targets for examples
     FOREACH (example ${QUACODE_EXAMPLES_SRCS})
       GET_FILENAME_COMPONENT(exampleBin ${example} NAME_WE)
       ADD_EXECUTABLE(${exampleBin} ${example})
-      TARGET_LINK_LIBRARIES(${exampleBin} ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} pthread)
+      TARGET_LINK_LIBRARIES(${exampleBin} ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
       # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
       # to remove the additional -bdynamic from the linker line.
-      IF(STATIC_LINKING)
+      IF(UNIX AND STATIC_LINKING)
           SET(CMAKE_EXE_LINKER_FLAGS "-static")
           SET_TARGET_PROPERTIES(${exampleBin} PROPERTIES LINK_SEARCH_END_STATIC 1)
-      ENDIF(STATIC_LINKING)
-
-      IF (BUILD_SHARED_LIBS)
-        ADD_DEPENDENCIES(${exampleBin} quacode)
-      ENDIF()
+      ENDIF(UNIX AND STATIC_LINKING)
     ENDFOREACH ()
   ENDIF(BUILD_EXAMPLES)
 

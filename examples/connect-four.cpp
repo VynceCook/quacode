@@ -445,7 +445,7 @@ public:
 
   int c4Heuristic(IntVar x, int k) const {
     if (k == 0) return x.max();
-    int boardBefore[row*col];
+    std::vector<int> boardBefore(row*col);
     int offSet = row*col*(k-1);
     for (int i=row-1; i>=0; i--)
       for (int j=0; j<col; j++) {
@@ -488,7 +488,7 @@ public:
   }
 
   template <int Player>
-  int check3lines(int board[]) const {
+  int check3lines(std::vector<int>& board) const {
     int lines = 0;
     // Detect winning blocks
     for (int z=0; z<4; z++) { // Row(0) / Col(1) / Diag1(2) / Diag2(3)
@@ -526,7 +526,7 @@ public:
   }
 
   template <int Player>
-  bool checklines(int board[]) const {
+  bool checklines(std::vector<int>& board) const {
     // Detect winning blocks
     for (int z=0; z<4; z++) { // Row(0) / Col(1) / Diag1(2) / Diag2(3)
       for (int i=0; i < col; i++) {

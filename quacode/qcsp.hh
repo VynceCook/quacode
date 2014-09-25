@@ -34,8 +34,8 @@
  *
  */
 
-#ifndef __GECODE_QCSP_HH__
-#define __GECODE_QCSP_HH__
+#ifndef __QCSP_HH__
+#define __QCSP_HH__
 
 #include <gecode/kernel.hh>
 
@@ -43,21 +43,21 @@
  * Configure linking
  *
  */
-#if !defined(GECODE_STATIC_LIBS) && \
+#if !defined(QUACODE_STATIC_LIB) && \
     (defined(__CYGWIN__) || defined(__MINGW32__) || defined(_MSC_VER))
 
-#ifdef GECODE_BUILD_QUACODE
-#define GECODE_QCSP_EXPORT __declspec( dllexport )
+#ifdef BUILD_QUACODE_LIB
+#define QUACODE_EXPORT __declspec( dllexport )
 #else
-#define GECODE_QCSP_EXPORT __declspec( dllimport )
+#define QUACODE_EXPORT __declspec( dllimport )
 #endif
 
 #else
 
-#ifdef GECODE_GCC_HAS_CLASS_VISIBILITY
-#define GECODE_QCSP_EXPORT __attribute__ ((visibility("default")))
+#ifdef QUACODE_GCC_HAS_CLASS_VISIBILITY
+#define QUACODE_EXPORT __attribute__ ((visibility("default")))
 #else
-#define GECODE_QCSP_EXPORT
+#define QUACODE_EXPORT
 #endif
 
 #endif
@@ -176,7 +176,7 @@ namespace Gecode {
         a[i] = x[i];
     }
     /// Allocate array with \a n elements and initialize with \a e0, ...
-    GECODE_QCSP_EXPORT
+    QUACODE_EXPORT
     QuantArgs(int n, TQuantifier e0, ...) : PrimArgArray<TQuantifier>(n) {
       va_list args;
       va_start(args, e0);
@@ -197,7 +197,7 @@ namespace Gecode {
    * Posts propagator for \f$ x_0 \diamond_{\mathit{o}} x_1 = x_2\f$
    * \ingroup TaskModelIntRelBool
    */
-  GECODE_QCSP_EXPORT void
+  QUACODE_EXPORT void
   qrel(Home home, QBoolVar qx0, BoolOpType o, QBoolVar qx1, BoolVar x2);
 
   /** \brief Post domain consistent propagator for Quantified Boolean clause with positive variables \a x and negative variables \a y
@@ -210,7 +210,7 @@ namespace Gecode {
    * from BOT_AND or BOT_OR.
    * \ingroup TaskModelIntRelBool
    */
-  GECODE_QCSP_EXPORT void
+  QUACODE_EXPORT void
   qclause(Home home, BoolOpType o, QBoolVarArgs x, QBoolVarArgs y,
           BoolVar z);
   /** \brief Post domain consistent propagator for Quantified Boolean clause with positive variables \a x and negative variables \a y
@@ -226,7 +226,7 @@ namespace Gecode {
    * from BOT_AND or BOT_OR.
    * \ingroup TaskModelIntRelBool
    */
-  GECODE_QCSP_EXPORT void
+  QUACODE_EXPORT void
   qclause(Home home, BoolOpType o, QBoolVarArgs x, QBoolVarArgs y,
           int n);
 }
