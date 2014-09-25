@@ -99,7 +99,7 @@ namespace Gecode {
   // The storage of strategy is not obvious, for previous example, it will be:
   // |id(x)|v1(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|v2(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|v3(x)|id(y)|v(y)|id(z)|v1(z)|v2(z)|
   // Forward declaration
-  class QUACODE_EXPORT Strategy {
+  class Strategy {
   friend class DynamicStrategy;
   friend class DynamicExpandStrategy;
   friend class StrategyExplore;
@@ -190,9 +190,9 @@ namespace Gecode {
     // Add new variable to the strategy
     void add(unsigned int id, unsigned int size);
     // Build vector of boxes, assumes that modeling is ended
-    virtual bool strategyInit();
+    QUACODE_EXPORT virtual bool strategyInit();
     /// Clear all data of the current strategy (used when search algorithm resets as well)
-    virtual void strategyReset();
+    QUACODE_EXPORT virtual void strategyReset();
 
     // Return current depth of strategy
     int depth(void) const { return curDepth; }
@@ -210,14 +210,14 @@ namespace Gecode {
     virtual void scenarioChoice(int vId, int vInf, int vSup);
 
     // Print current strategy
-    virtual void print(std::ostream& os) const;
+    QUACODE_EXPORT virtual void print(std::ostream& os) const;
   };
 
   // This is an expanded strategy. It is based on a static strategy where all choices
   // are expanded.
   // For static expanded strategy, some data structures of Strategy are unused. For example
   // curBranch is not needed as we don't need to know about the backtrack
-  class QUACODE_EXPORT StaticExpandStrategy : public Strategy {
+  class StaticExpandStrategy : public Strategy {
     // Copy constructor
     StaticExpandStrategy(const StaticExpandStrategy& s);
 
@@ -235,7 +235,7 @@ namespace Gecode {
     virtual StaticExpandStrategy* copy(void) const { return new StaticExpandStrategy(*this); }
 
     // Build vector of boxes, assumes that modeling is ended
-    virtual bool strategyInit();
+    QUACODE_EXPORT virtual bool strategyInit();
 
     /// Called when a failed scenario was found
     virtual void scenarioFailed();
@@ -252,7 +252,7 @@ namespace Gecode {
   // So it may increases computing time. But it does not require to allocate the
   // full strategy in memory, so it may be uses to store strategies which cannot be
   // stored with full tree, but are smaller because sub-trees are cut during the search.
-  class QUACODE_EXPORT DynamicStrategy : public Strategy {
+  class DynamicStrategy : public Strategy {
     // Print current strategy
     void print(std::ostream& os, Box* p, unsigned int curRemainingBlockSize, int depth) const;
 
@@ -286,9 +286,9 @@ namespace Gecode {
     virtual DynamicStrategy* copy(void) const { return new DynamicStrategy(*this); }
 
     // Build vector of boxes, assumes that modeling is ended
-    virtual bool strategyInit();
+    QUACODE_EXPORT virtual bool strategyInit();
     /// Clear all data of the current strategy (used when search algorithm resets as well)
-    virtual void strategyReset();
+    QUACODE_EXPORT virtual void strategyReset();
 
     /// Called when a failed scenario was found
     virtual void scenarioFailed();
@@ -299,7 +299,7 @@ namespace Gecode {
     virtual void scenarioChoice(int vId, int vInf, int vSup);
 
     // Print current strategy
-    virtual void print(std::ostream& os) const;
+    QUACODE_EXPORT virtual void print(std::ostream& os) const;
 
     // Static function to convert strategy object
     static DynamicStrategy* fromStaticStrategy(const Strategy& ds);
@@ -309,7 +309,7 @@ namespace Gecode {
   // are expanded.
   // For dynamic expanded strategy, we use the curBranch data structure to store the blocks
   // allowed. These blocks will be freed when backtrack because of failure
-  class QUACODE_EXPORT DynamicExpandStrategy : public DynamicStrategy {
+  class DynamicExpandStrategy : public DynamicStrategy {
     // Copy constructor
     DynamicExpandStrategy(const DynamicExpandStrategy& s);
     // Convert constructor
@@ -329,7 +329,7 @@ namespace Gecode {
     virtual DynamicExpandStrategy* copy(void) const { return new DynamicExpandStrategy(*this); }
 
     // Build vector of boxes, assumes that modeling is ended
-    virtual bool strategyInit();
+    QUACODE_EXPORT virtual bool strategyInit();
 
     /// Called when a failed scenario was found
     virtual void scenarioFailed();
@@ -370,7 +370,7 @@ namespace Gecode {
     };
 
 
-  class QUACODE_EXPORT QSpaceInfo {
+  class QSpaceInfo {
   friend class StaticExpandStrategy;
   friend class DynamicExpandStrategy;
   template<class View> friend class ::Gecode::Int::Watch;
@@ -439,7 +439,7 @@ namespace Gecode {
       const std::vector<LkBinderVarObj>& linkIdVars(void) const;
     };
 
-    class QUACODE_EXPORT QSpaceSharedInfo : public SharedHandle {
+    class QSpaceSharedInfo : public SharedHandle {
       public:
         /// Constructor
         QSpaceSharedInfo(void);
@@ -518,18 +518,18 @@ namespace Gecode {
 
     /// Update QSpace with data from brancher handle \a bh which contains variables \a x quantified with
     /// quantifier \a _q. It will also update data shared by all clones.
-    void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const IntVarArgs& x);
-    void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const BoolVarArgs& x);
+    QUACODE_EXPORT void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const IntVarArgs& x);
+    QUACODE_EXPORT void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const BoolVarArgs& x);
   private:
     /// Copy Constructor (disabled)
     QSpaceInfo(const QSpaceInfo& qs);
   public:
     /// Default constructor
-    QSpaceInfo(void);
+    QUACODE_EXPORT QSpaceInfo(void);
     /// Default destructor
-    ~QSpaceInfo(void);
+    QUACODE_EXPORT ~QSpaceInfo(void);
     /// Copy Constructor
-    QSpaceInfo(Space& home, bool share, QSpaceInfo& qs);
+    QUACODE_EXPORT QSpaceInfo(Space& home, bool share, QSpaceInfo& qs);
 
     /// Return the quantifier used for the brancher \a id
     TQuantifier brancherQuantifier(unsigned int id) const;
@@ -588,13 +588,13 @@ namespace Gecode {
     template <class VarType> static void tripleChoice(const Space &home, const BrancherHandle& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
 
     /// Branch over boolean variable \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> std::vector<BrancherHandle> branch(Home home, const BoolVar& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const BoolVar& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
     /// Branch over boolean variables \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> std::vector<BrancherHandle> branch(Home home, const BoolVarArgs& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const BoolVarArgs& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
     /// Branch over integer variable \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> std::vector<BrancherHandle> branch(Home home, const IntVar& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const IntVar& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
     /// Branch over integer variables \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> std::vector<BrancherHandle> branch(Home home, const IntVarArgs& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const IntVarArgs& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
 
   };
 }

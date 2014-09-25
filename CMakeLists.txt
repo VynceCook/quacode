@@ -155,7 +155,6 @@ ELSE (NOT GECODE_FOUND)
     quacode/support/log.cpp
     quacode/search/qdfs.cpp
     quacode/search/sequential/qpath.cpp
-    quacode/qint/qbool/eqv.cpp
     quacode/qint/qbool/qbool.cpp
     ${GECODE_SRC}/gecode/search/meta/nogoods.cpp
   )

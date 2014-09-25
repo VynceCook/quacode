@@ -111,7 +111,7 @@ public:
     using namespace Int;
     int depth = opt.n;// Size of the matrix is 2^depth. Large values may take long to solve...
     int boardSize = (int)pow((double)2,(double)depth);
-    std::srand(std::time(NULL));
+    std::srand(static_cast<unsigned int>(std::time(NULL)));
 
     // If a file is given we take the matrix from the file
     bool bFile = false;
