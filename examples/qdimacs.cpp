@@ -48,7 +48,6 @@ using namespace Gecode;
 
 /** \brief Options for %SAT problems
  *
- * \relates SAT
  */
 class QDimacsOptions : public Options {
 public:
@@ -306,7 +305,6 @@ public:
 
 
 /** \brief Main-function
- *  \relates SAT
  */
 int main(int argc, char* argv[]) {
 

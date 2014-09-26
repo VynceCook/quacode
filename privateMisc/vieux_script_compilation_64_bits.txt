@@ -1,0 +1,129 @@
+# -------------------------------------------------
+# Génération des versions compilées de Gecode :
+# -------------------------------------------------
+
+# mkdir gecode-debug
+# cd gecode-debug
+# ~/Dropbox/gecode_trunk/configure --enable-audit --enable-debug --disable-qt --disable-examples
+# cd ..
+# mkdir gecode-debug-static
+# cd gecode-debug-static
+# ~/Dropbox/gecode_trunk/configure --enable-static --enable-audit --enable-debug --disable-qt --disable-examples
+# cd ..
+# mkdir gecode-release
+# cd gecode-release
+# ~/Dropbox/gecode_trunk/configure --disable-qt --disable-examples
+# cd ..
+# mkdir gecode-release-static
+# cd gecode-release-static
+# ~/Dropbox/gecode_trunk/configure --enable-static --disable-qt --disable-examples
+# cd ..
+
+# Pour les versions "static", la compilation de flatzinc ne fonctionne pas car il link
+# avec libgecodefloat qui a besoin de mpfr, il faut donc rajouter -lmpfr à la fin de la ligne de compilation
+
+
+# -------------------------------------------------
+# Génération des versions compilées de QuaCode :
+# -------------------------------------------------
+
+# mkdir quacode-debug
+# cd quacode-debug
+# cmake -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DGECODE_BIN=../gecode-debug -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-debug-static
+# cd quacode-debug-static
+# cmake -DSTATIC_LINKING=ON -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DGECODE_BIN=../gecode-debug-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-debug-sibus
+# cd quacode-debug-sibus
+# cmake -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DUSE_SIBUS=ON -DGECODE_BIN=../gecode-debug -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-debug-sibus-static
+# cd quacode-debug-sibus-static
+# cmake -DSTATIC_LINKING=ON -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DUSE_SIBUS=ON -DGECODE_BIN=../gecode-debug-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-debug-sibus-thread
+# cd quacode-debug-sibus-thread
+# cmake -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DUSE_SIBUS=ON -DSIBUS_THREAD=ON -DGECODE_BIN=../gecode-debug -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-debug-sibus-thread-static
+# cd quacode-debug-sibus-thread-static
+# cmake -DSTATIC_LINKING=ON -DCMAKE_BUILD_TYPE=Debug -DLOG_AUDIT=ON -DUSE_SIBUS=ON -DSIBUS_THREAD=ON -DGECODE_BIN=../gecode-debug-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+
+# mkdir quacode-release
+# cd quacode-release
+# cmake -DGECODE_BIN=../gecode-release -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-release-static
+# cd quacode-release-static
+# cmake -DSTATIC_LINKING=ON -DGECODE_BIN=../gecode-release-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-release-sibus
+# cd quacode-release-sibus
+# cmake -DUSE_SIBUS=ON -DGECODE_BIN=../gecode-release -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-release-sibus-static
+# cd quacode-release-sibus-static
+# cmake -DSTATIC_LINKING=ON -DUSE_SIBUS=ON -DGECODE_BIN=../gecode-release-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-release-sibus-thread
+# cd quacode-release-sibus-thread
+# cmake -DUSE_SIBUS=ON -DSIBUS_THREAD=ON -DGECODE_BIN=../gecode-release -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+# mkdir quacode-release-sibus-thread-static
+# cd quacode-release-sibus-thread-static
+# cmake -DSTATIC_LINKING=ON -DUSE_SIBUS=ON -DSIBUS_THREAD=ON -DGECODE_BIN=../gecode-release-static -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
+# cd ..
+
+# -------------------------------------------------
+# Compilation de tous les répertoires quacode
+# -------------------------------------------------
+
+TARGET="gecode-debug
+        gecode-debug-static
+        gecode-release
+        gecode-release-static
+        quacode-debug
+        quacode-debug-static
+        quacode-debug-sibus
+        quacode-debug-sibus-static
+        quacode-debug-sibus-thread
+        quacode-debug-sibus-thread-static
+        quacode-release
+        quacode-release-static
+        quacode-release-sibus
+        quacode-release-sibus-static
+        quacode-release-sibus-thread
+        quacode-release-sibus-thread-static"
+
+for t in $TARGET; do
+  cd $t
+  make
+  cd ..
+done
+
+# -------------------------------------------------
+# Ajout au git des fichiers pertinants
+# -------------------------------------------------
+
+# git add gecode-debug/libgecode*
+# git add gecode-release/libgecode*
+
+# TARGET_BIN="baker
+#             connect-four
+#             ex-article
+#             matrix-game
+#             nim-fibo
+#             qbf
+#             qdimacs
+#             speeddating
+#             baker-dbh
+#             matrix-game-dbh
+#             nim-fibo-dbh"
+# 
+# for t in $TARGET_BIN; do
+#   find . -name "$t" -exec git add \{\} \;
+# done
+
