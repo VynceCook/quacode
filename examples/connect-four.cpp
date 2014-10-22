@@ -560,6 +560,10 @@ c4Heuristic<N>::value(const Space& _home, IntVar x, int) {
   return home.c4Heuristic(x,N);
 }
 
+const int ConnectFourAllState::Red;
+const int ConnectFourAllState::Black;
+const int ConnectFourAllState::Nil;
+
 int main(int argc, char* argv[])
 {
 
