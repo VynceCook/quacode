@@ -519,7 +519,7 @@ public:
   template <int Player>
   bool check4for3(int a, int b, int c, int d) const {
     if ((a == Player) && (b == Player) && (c == Player)) return (d == Nil);
-    else if ((a == Player) && (b == Player) && (c == Player)) return (c == Nil);
+    else if ((a == Player) && (b == Player) && (d == Player)) return (c == Nil);
     else if ((a == Player) && (c == Player) && (d == Player)) return (b == Nil);
     else if ((b == Player) && (c == Player) && (d == Player)) return (a == Nil);
     else return false;
