@@ -166,6 +166,15 @@ ELSE (NOT GECODE_FOUND)
     examples/connect-four.cpp
     examples/baker.cpp
   )
+  SET(QUACODE_FLATZINC_HEADERS
+    quacode/flatzinc.hh
+    quacode/flatzinc/varspec.hh
+  )
+  SET(QUACODE_FLATZINC_SRCS
+    quacode/flatzinc/fzn-quacode.cpp
+    quacode/flatzinc/flatzinc.cpp
+    ${GECODE_SRC}/gecode/flatzinc/registry.cpp
+  )
 
   SOURCE_GROUP("Hpp Files" REGULAR_EXPRESSION ".hpp")
 
@@ -193,5 +202,37 @@ ELSE (NOT GECODE_FOUND)
       ENDIF(UNIX AND STATIC_LINKING)
     ENDFOREACH ()
   ENDIF(BUILD_EXAMPLES)
+
+  # Add target for Quacode/FlatZinc
+  FIND_PACKAGE(BISON 3.0.0)
+  FIND_PACKAGE(FLEX)
+  IF (BISON_FOUND AND FLEX_FOUND)
+    BISON_TARGET(FLATZINCPARSER quacode/flatzinc/parser.yxx ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
+    FLEX_TARGET(FLATZINCSCANNER ${GECODE_SRC}/gecode/flatzinc/lexer.lxx  ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
+    ADD_FLEX_BISON_DEPENDENCY(FLATZINCSCANNER FLATZINCPARSER)
+    ADD_EXECUTABLE(fzn-quacode ${QUACODE_FLATZINC_SRCS} ${QUACODE_FLATZINC_HEADERS} ${BISON_FLATZINCPARSER_OUTPUTS} ${FLEX_FLATZINCSCANNER_OUTPUTS})
+    FIND_PACKAGE(Qt4 4.4 COMPONENTS QtCore)
+    IF (QT_FOUND)
+      GET_PROPERTY(DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+      SET(DIRS ${DIRS} ${QT_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
+      SET_TARGET_PROPERTIES(fzn-quacode PROPERTIES INCLUDE_DIRECTORIES "${DIRS}")
+      TARGET_LINK_LIBRARIES(fzn-quacode ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} ${QT_QTCORE_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+    ELSE()
+      TARGET_LINK_LIBRARIES(fzn-quacode ${QUACODE_LIBRARIES} ${GECODE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+    ENDIF()
+
+    # set -static, when STATIC_LINKING is TRUE and set LINK_SEARCH_END_STATIC
+    # to remove the additional -bdynamic from the linker line.
+    IF(UNIX AND STATIC_LINKING)
+      SET(CMAKE_EXE_LINKER_FLAGS "-static")
+      SET_TARGET_PROPERTIES(fzn-quacode PROPERTIES LINK_SEARCH_END_STATIC 1)
+    ENDIF(UNIX AND STATIC_LINKING)
+
+    IF (BUILD_SHARED_LIBS)
+      ADD_DEPENDENCIES(fzn-quacode quacode)
+    ENDIF()
+  ELSE()
+    MESSAGE(STATUS "Can't find Flex and Bison, Quacode FlatZinc will be not built.")
+  ENDIF()
 
 ENDIF(NOT GECODE_FOUND)
