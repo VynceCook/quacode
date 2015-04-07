@@ -165,6 +165,7 @@ ELSE (NOT GECODE_FOUND)
     examples/matrix-game.cpp
     examples/connect-four.cpp
     examples/baker.cpp
+    examples/rndQCSP.cpp
   )
 
   SOURCE_GROUP("Hpp Files" REGULAR_EXPRESSION ".hpp")
