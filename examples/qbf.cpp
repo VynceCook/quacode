@@ -106,7 +106,7 @@ public:
 class QBFProblem : public Script, public QSpaceInfo {
   BoolVarArray X;
 public:
-  QBFProblem(const QBFOptions& opt) : Script(), QSpaceInfo()
+  QBFProblem(const QBFOptions& opt) : Script(opt), QSpaceInfo()
   {
     std::cout << "Loading problem" << std::endl;
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy

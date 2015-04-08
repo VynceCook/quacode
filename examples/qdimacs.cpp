@@ -155,7 +155,7 @@ private:
   QBoolVarArray qx;
 public:
   /// The actual problem
-  QDimacs(const QDimacsOptions& opt) : QSpaceInfo() {
+  QDimacs(const QDimacsOptions& opt) : Script(opt), QSpaceInfo() {
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy
     parseQDIMACS(opt.filename.c_str(),opt._qConstraint.value());
   }

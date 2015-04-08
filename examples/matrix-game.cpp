@@ -113,7 +113,7 @@ class QCSPMatrixGame : public Script, public QSpaceInfo {
 
 public:
 
-  QCSPMatrixGame(const MatrixGameOptions& opt) : Script(), QSpaceInfo()
+  QCSPMatrixGame(const MatrixGameOptions& opt) : Script(opt), QSpaceInfo()
   {
     std::cout << "Loading problem" << std::endl;
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy

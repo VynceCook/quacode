@@ -96,7 +96,7 @@ class QCSPBaker : public Script, public QSpaceInfo {
   IntVarArray X;
 
 public:
-  QCSPBaker(const BakerOptions& opt) : Script(), QSpaceInfo()
+  QCSPBaker(const BakerOptions& opt) : Script(opt), QSpaceInfo()
   {
     std::cout << "Loading problem" << std::endl;
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy

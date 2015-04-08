@@ -123,7 +123,7 @@ class QCSPNimFibo : public Script, public QSpaceInfo {
 
 public:
 
-  QCSPNimFibo(const NimFiboOptions& opt) : Script(), QSpaceInfo()
+  QCSPNimFibo(const NimFiboOptions& opt) : Script(opt), QSpaceInfo()
   {
     std::cout << "Loading problem" << std::endl;
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy

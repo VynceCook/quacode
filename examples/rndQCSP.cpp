@@ -89,7 +89,7 @@ class RndQCSP : public Script, public QSpaceInfo {
     IntVarArray X;
 
     public:
-    RndQCSP(const RndQCSPOptions& opt) : Script(), QSpaceInfo()
+    RndQCSP(const RndQCSPOptions& opt) : Script(opt), QSpaceInfo()
     {
         std::cout << "Loading problem" << std::endl;
         using namespace Int;

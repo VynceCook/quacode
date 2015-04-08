@@ -184,7 +184,7 @@ class ConnectFourAllState : public Script, public QSpaceInfo {
   const ConnectFourOptions& opt;
 
 public:
-  ConnectFourAllState(const ConnectFourOptions& _opt) : Script(), QSpaceInfo(), opt(_opt)
+  ConnectFourAllState(const ConnectFourOptions& _opt) : Script(_opt), QSpaceInfo(), opt(_opt)
   {
     std::cout << "Loading problem" << std::endl;
     if (!opt.printStrategy()) strategyMethod(0); // disable build and print strategy
