@@ -120,6 +120,7 @@ namespace Gecode { namespace Search { namespace Sequential {
   forceinline Space*
   QDFS::next(void) {
     Space * solvedSpace = NULL;
+    Space * failedSpace = NULL;
     TQuantifier bckQuant = EXISTS;
     start();
     while (true) {
@@ -140,7 +141,7 @@ namespace Gecode { namespace Search { namespace Sequential {
           // On devra dépiler jusqu'au dernier existentiel
           bckQuant = EXISTS;
           fail++;
-          delete cur;
+          failedSpace = cur;
           cur = NULL;
           break;
         case SS_SOLVED:
@@ -180,10 +181,11 @@ namespace Gecode { namespace Search { namespace Sequential {
           cur = NULL;
           if (solvedSpace)
           {
-            dynamic_cast<QSpaceInfo*>(cur)->strategySuccess();
+            dynamic_cast<QSpaceInfo*>(solvedSpace)->strategySuccess();
             return solvedSpace;
           } else {
-            dynamic_cast<QSpaceInfo*>(cur)->strategyFailed();
+            dynamic_cast<QSpaceInfo*>(failedSpace)->strategyFailed();
+            delete failedSpace;
             return NULL;
           }
         }
@@ -193,6 +195,11 @@ namespace Gecode { namespace Search { namespace Sequential {
       {
         delete solvedSpace;
         solvedSpace = NULL;
+      }
+      if (failedSpace)
+      {
+        delete failedSpace;
+        failedSpace = NULL;
       }
     }
     GECODE_NEVER;
