@@ -90,6 +90,7 @@ namespace Gecode { namespace Search { namespace Sequential {
     if ((s == NULL) || (s->status(*this) == SS_FAILED)) {
       fail++;
       cur = NULL;
+      if (s) dynamic_cast<QSpaceInfo*>(s)->strategyFailed();
       if (!opt.clone)
         delete s;
     } else {
@@ -105,6 +106,7 @@ namespace Gecode { namespace Search { namespace Sequential {
     d = 0;
     if ((s == NULL) || (s->status(*this) == SS_FAILED)) {
       cur = NULL;
+      if (s) dynamic_cast<QSpaceInfo*>(s)->strategyFailed();
     } else {
       cur = s;
       dynamic_cast<QSpaceInfo*>(cur)->strategyReset();
@@ -184,8 +186,12 @@ namespace Gecode { namespace Search { namespace Sequential {
             dynamic_cast<QSpaceInfo*>(solvedSpace)->strategySuccess();
             return solvedSpace;
           } else {
-            dynamic_cast<QSpaceInfo*>(failedSpace)->strategyFailed();
-            delete failedSpace;
+            if (failedSpace)
+            {
+              // Can be NULL if failed space on construction
+              dynamic_cast<QSpaceInfo*>(failedSpace)->strategyFailed();
+              delete failedSpace;
+            }
             return NULL;
           }
         }
