@@ -36,9 +36,15 @@ Pour compiler gecode en release 32 bits
 Pour compiler gecode en release/static 32 bits
   CC="gcc -m32" CXX="g++ -m32" cmake -DSTATIC_LINKING=ON -DGECODE_BIN=/home/vincent/builds/gecode-release-static-32 -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Sources/quacode/
 
+# -------------------------------------------------
+# Compilation Quacode
+# -------------------------------------------------
 cmake -DGECODE_BIN=/home/vincent/builds/gecode-debug -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
 cmake -DBUILD_SHARED_LIBS=true -DGECODE_BIN=/home/vincent/builds/gecode-debug -DGECODE_SRC=/home/vincent/Dropbox/gecode_trunk /home/vincent/Dropbox/Sources/
 
+# -------------------------------------------------
+# Divers
+# -------------------------------------------------
 I=7; while [ $I -ge 0 ]; do ./qbf -quantifiedConstraints true $I | grep propagations; I=$(($I - 1)); done
 
 Pour générer un core dump : ulimit -c unlimited
@@ -49,3 +55,9 @@ diff -urN --exclude='.svn' --exclude='.settings' --exclude='autom4te.cache' -x c
 
 svn propset svn:keywords "Author Date Id Revision" all-interval.cpp
 
+# -------------------------------------------------------------------
+Ligne de diff entre Quacode du trunk de Gecode et mon répertoire courant.
+Ça élimine les lignes de révision du svn et les répertoires 'git' et 'privateMisc'
+On peut en faire un patch à appliquer directement sur le trunk de Gecode
+
+diff -uNr -x '.git' -x 'privateMisc' -I '\* *$Date' -I '\* *$Revision' -I '# *$Date' -I '# *$Revision' ~/Dropbox/gecode_trunk/contribs/quacode/ ./quacode
