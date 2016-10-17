@@ -662,16 +662,15 @@ namespace Gecode {
   }
 
   template<class VarType> forceinline
-  void QSpaceInfo::doubleChoice (const Space &home, const BrancherHandle& bh,
-                                 unsigned int,
+  void QSpaceInfo::doubleChoice (const Space &home, const Brancher& bh,                                      			unsigned int,
                                  VarType x, int pos, const int&,
                                  std::ostream& ) {
     const QSpaceInfo& qsi = dynamic_cast<const QSpaceInfo&>(home);
-    if (qsi.bRecordStrategy) const_cast<QSpaceInfo&>(qsi).sharedInfo.scenarioChoice(bh.id(),pos,x.min(),x.max());
+    if (qsi.bRecordStrategy) const_cast<QSpaceInfo&>(qsi).sharedInfo.scenarioChoice(bh.id(),pos,x.min(),x.max());  
   }
 
   template<> forceinline
-  void QSpaceInfo::runCustomChoice (const Space &home, const BrancherHandle& bh,
+  void QSpaceInfo::runCustomChoice (const Space &home, const Brancher& bh,
                                     unsigned int alt,
                                     BoolVar x, int pos, const int& val,
                                     std::ostream& os) {
@@ -679,8 +678,8 @@ namespace Gecode {
     (*QSpaceInfo::customBoolVVP)(home,bh,alt,x,pos,val,os);
   }
 
-  template<> forceinline
-  void QSpaceInfo::runCustomChoice (const Space &home, const BrancherHandle& bh,
+  template<> forceinline                                                                                           
+  void QSpaceInfo::runCustomChoice (const Space &home, const Brancher& bh,
                                     unsigned int alt,
                                     IntVar x, int pos, const int& val,
                                     std::ostream& os) {
@@ -689,7 +688,7 @@ namespace Gecode {
   }
 
   template<class VarType> forceinline
-  void QSpaceInfo::tripleChoice (const Space &home, const BrancherHandle& bh,
+  void QSpaceInfo::tripleChoice (const Space &home, const Brancher& bh,
                                  unsigned int alt,
                                  VarType x, int pos, const int& val,
                                  std::ostream& os) {

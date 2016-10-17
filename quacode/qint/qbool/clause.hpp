@@ -415,6 +415,24 @@ namespace Gecode { namespace Int { namespace Bool {
   }
 
   template<class VX, class VY>
+  void
+  QClause<VX,VY>::reschedule(Space& home) {
+    z.reschedule(home,*this,PC_BOOL_VAL);
+    if (n_zero == x.size() + y.size())
+      VX::schedule(home,*this,ME_BOOL_VAL);
+    for (int i=x.size(); i--; )
+      if (x[i].one()) {
+        VX::schedule(home,*this,ME_BOOL_VAL);
+        return;
+      }
+    for (int i=y.size(); i--; )
+      if (y[i].one()) {
+        VX::schedule(home,*this,ME_BOOL_VAL);
+        return;
+      }
+  }
+
+  template<class VX, class VY>
   ExecStatus
   QClause<VX,VY>::propagate(Space& home, const ModEventDelta&) {
     if (z.one())

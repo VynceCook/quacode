@@ -409,6 +409,8 @@ namespace Gecode { namespace Int { namespace Bool {
     virtual Actor* copy(Space& home, bool share);
     /// Give advice to propagator
     virtual ExecStatus advise(Space& home, Advisor& a, const Delta& d);
+    /// Schedule function
+    virtual void reschedule(Space& home);
     /// Cost function (defined as low unary)
     virtual PropCost cost(const Space& home, const ModEventDelta& med) const;
     /// Perform propagation

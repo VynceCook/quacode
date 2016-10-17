@@ -100,12 +100,7 @@ public:
 
 /// Succeed the space
 static void gf_success(Space& home) {
-  Space::Branchers b(home);
-  while (b()) {
-    BrancherHandle bh(b.brancher());
-    ++b;
-    bh.kill(home);
-  }
+  Home(home).branchergroup().kill(home);
 }
 
 /// Dummy function
@@ -156,14 +151,14 @@ public:
         // Adding Cut
         if (opt.cut())
           cut(*this, cutExpr1 && cutExpr2 && !(o1 && o2));  // Universal player can't play
+        cutExpr1 = cutExpr1 && o1;
         branch(*this, X[i], INT_VAR_NONE(), INT_VAL_MIN());
       } else {
         // Existantial Player
         rel(*this, o_im1 == (o1 && o2 && oi));
         branch(*this, X[i], INT_VAR_NONE(), INT_VAL_MIN());
       }
-      cutExpr1 = cutExpr1 && o1;
-      cutExpr2 = o2;
+      cutExpr2 = o1;
       o_im1 = oi;
     }
   }

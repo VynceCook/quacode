@@ -409,9 +409,9 @@ namespace Gecode {
       virtual SharedHandle::Object* copy(void) const { return new QSpaceSharedInfoO(*this); }
 
       /// Add new quantified brancher information
-      void add(const QSpaceInfo& qsi, const BrancherHandle& bh, TQuantifier _q, const BoolVarArgs& x);
+      void add(const QSpaceInfo& qsi, TQuantifier _q, const BoolVarArgs& x);
       /// Add new quantified brancher information
-      void add(const QSpaceInfo& qsi, const BrancherHandle& bh, TQuantifier _q, const IntVarArgs& x);
+      void add(const QSpaceInfo& qsi, TQuantifier _q, const IntVarArgs& x);
       /// Return the quantifier used for the brancher \a bh
       forceinline TQuantifier brancherQuantifier(unsigned int id) const { return v[id-1].quantifier; }
       /// Return the offset computed when the brancher \a bh was added
@@ -448,8 +448,8 @@ namespace Gecode {
         /// Initialise for use
         void init(StrategyMethod sm);
         /// Add new brancher information
-        void add(const QSpaceInfo& qsi, const BrancherHandle& bh, TQuantifier _q, const IntVarArgs& x);
-        void add(const QSpaceInfo& qsi, const BrancherHandle& bh, TQuantifier _q, const BoolVarArgs& x);
+        void add(const QSpaceInfo& qsi, TQuantifier _q, const IntVarArgs& x);
+        void add(const QSpaceInfo& qsi, TQuantifier _q, const BoolVarArgs& x);
 
         /// SharedInfo access
         /// Return the quantifier used for the brancher \a id
@@ -480,8 +480,8 @@ namespace Gecode {
     };
 
     /// Wrapper function to record choice in scenario
-    static void scenarioChoice(const Space &home, const BrancherHandle& bh, unsigned int a, BoolVar x, int i, const int& n, std::ostream& );
-    static void scenarioChoice(const Space &home, const BrancherHandle& bh, unsigned int a, IntVar x, int i, const int& n, std::ostream& );
+    static void scenarioChoice(const Space &home, unsigned int a, BoolVar x, int i, const int& n, std::ostream& );
+    static void scenarioChoice(const Space &home, unsigned int a, IntVar x, int i, const int& n, std::ostream& );
 
     /// The following arrays are not maintained during cloning !!!
     /// Only meaningful during modeling
@@ -516,10 +516,10 @@ namespace Gecode {
     /// Array of all integer variables to branch with
     IntVarArray _intVars;
 
-    /// Update QSpace with data from brancher handle \a bh which contains variables \a x quantified with
+    /// Update QSpace with variables \a x quantified with
     /// quantifier \a _q. It will also update data shared by all clones.
-    QUACODE_EXPORT void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const IntVarArgs& x);
-    QUACODE_EXPORT void updateQSpaceInfo(const BrancherHandle& bh, TQuantifier _q, const BoolVarArgs& x);
+    QUACODE_EXPORT void updateQSpaceInfo(TQuantifier _q, const IntVarArgs& x);
+    QUACODE_EXPORT void updateQSpaceInfo(TQuantifier _q, const BoolVarArgs& x);
   private:
     /// Copy Constructor (disabled)
     QSpaceInfo(const QSpaceInfo& qs);
@@ -583,19 +583,18 @@ namespace Gecode {
     /// Wrapper function to print data during branching
     static BoolVarValPrint customBoolVVP;
     static IntVarValPrint customIntVVP;
-    template <class VarType> static void runCustomChoice(const Space &home, const BrancherHandle& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
-    template <class VarType> static void doubleChoice(const Space &home, const BrancherHandle& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
-    template <class VarType> static void tripleChoice(const Space &home, const BrancherHandle& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
+    template <class VarType> static void runCustomChoice(const Space &home, const Brancher& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
+    template <class VarType> static void doubleChoice(const Space &home, const Brancher& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
+    template <class VarType> static void tripleChoice(const Space &home, const Brancher& bh, unsigned int alt, VarType x, int pos, const int& val, std::ostream& os);
 
     /// Branch over boolean variable \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const BoolVar& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT void branch(Home home, const BoolVar& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
     /// Branch over boolean variables \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const BoolVarArgs& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT void branch(Home home, const BoolVarArgs& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf=NULL, BoolVarValPrint vvp=NULL);
     /// Branch over integer variable \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const IntVar& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
+    template <class BranchType> QUACODE_EXPORT void branch(Home home, const IntVar& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
     /// Branch over integer variables \a x, quantified variable selection \a vars and value selection \a vals
-    template <class BranchType> QUACODE_EXPORT std::vector<BrancherHandle> branch(Home home, const IntVarArgs& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
-
+    template <class BranchType> QUACODE_EXPORT void branch(Home home, const IntVarArgs& x, BranchType vars, IntValBranch vals, IntBranchFilter bf=NULL, IntVarValPrint vvp=NULL);
   };
 }
 

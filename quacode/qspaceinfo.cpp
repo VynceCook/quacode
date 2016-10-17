@@ -40,8 +40,8 @@
 using namespace std;
 
 namespace Gecode {
-  BoolVarValPrint QSpaceInfo::customBoolVVP = NULL;
-  IntVarValPrint QSpaceInfo::customIntVVP = NULL;
+  BoolVarValPrint QSpaceInfo::customBoolVVP = NULL;   
+  IntVarValPrint QSpaceInfo::customIntVVP = NULL;     
 
   bool Strategy::strategyInit() {
     assert(bx == NULL);
@@ -214,14 +214,13 @@ namespace Gecode {
   }
 
   void
-  QSpaceInfo::QSpaceSharedInfoO::add(const QSpaceInfo& qsi, const BrancherHandle& bh,
+  QSpaceInfo::QSpaceSharedInfoO::add(const QSpaceInfo& qsi,
                                      TQuantifier _q,
                                      const BoolVarArgs& x) {
-    assert(bh.id() == (v.size() + 1));
     unsigned int offset = 0;
     if (v.size() > 0) offset = v[v.size()-1].offset + v[v.size()-1].size;
-    v.resize(bh.id());
-    v[bh.id()-1] = QBI(_q,offset,x.size());
+    v.resize(v.size() + 1);
+    v[v.size()-1] = QBI(_q,offset,x.size());
     for (int i=0; i<x.size(); i++) {
       if (qsi.curStrategyMethod & StrategyMethodValues::EXPAND)
         _linkIdVars.push_back(LkBinderVarObj(qsi._boolVars.size()+i,LkBinderVarObj::BOOL));
@@ -230,14 +229,13 @@ namespace Gecode {
   }
 
   void
-  QSpaceInfo::QSpaceSharedInfoO::add(const QSpaceInfo& qsi, const BrancherHandle& bh,
+  QSpaceInfo::QSpaceSharedInfoO::add(const QSpaceInfo& qsi,
                                      TQuantifier _q,
                                      const IntVarArgs& x) {
-    assert(bh.id() == (v.size() + 1));
     unsigned int offset = 0;
     if (v.size() > 0) offset = v[v.size()-1].offset + v[v.size()-1].size;
-    v.resize(bh.id());
-    v[bh.id()-1] = QBI(_q,offset,x.size());
+    v.resize(v.size() + 1);
+    v[v.size()-1] = QBI(_q,offset,x.size());
     for (int i=0; i<x.size() ; i++) {
       if (qsi.curStrategyMethod & StrategyMethodValues::EXPAND)
         _linkIdVars.push_back(LkBinderVarObj(qsi._intVars.size()+i,LkBinderVarObj::INT));
@@ -314,62 +312,59 @@ namespace Gecode {
     }
 
   void
-  QSpaceInfo::QSpaceSharedInfo::add(const QSpaceInfo& qsi, const BrancherHandle& bh,
+  QSpaceInfo::QSpaceSharedInfo::add(const QSpaceInfo& qsi,
                                     TQuantifier _q,
                                     const IntVarArgs& x) {
-    static_cast<QSpaceSharedInfoO*>(object())->add(qsi,bh,_q,x);
+    static_cast<QSpaceSharedInfoO*>(object())->add(qsi,_q,x);
   }
 
   void
-  QSpaceInfo::QSpaceSharedInfo::add(const QSpaceInfo& qsi, const BrancherHandle& bh,
+  QSpaceInfo::QSpaceSharedInfo::add(const QSpaceInfo& qsi,
                                     TQuantifier _q,
                                     const BoolVarArgs& x) {
-    static_cast<QSpaceSharedInfoO*>(object())->add(qsi,bh,_q,x);
+    static_cast<QSpaceSharedInfoO*>(object())->add(qsi,_q,x);
   }
 
   void
-  QSpaceInfo::updateQSpaceInfo(const BrancherHandle& bh,
-                               TQuantifier _q,
+  QSpaceInfo::updateQSpaceInfo(TQuantifier _q,
                                const BoolVarArgs& x) {
-    sharedInfo.add(*this,bh,_q,x);
+    sharedInfo.add(*this,_q,x);
     if (curStrategyMethod & StrategyMethodValues::EXPAND)
       _boolVars = BoolVarArray(dynamic_cast<Space&>(*this),_boolVars+x);
   }
 
   void
-  QSpaceInfo::updateQSpaceInfo(const BrancherHandle& bh,
-                               TQuantifier _q,
+  QSpaceInfo::updateQSpaceInfo(TQuantifier _q,
                                const IntVarArgs& x) {
-    sharedInfo.add(*this,bh,_q,x);
+    sharedInfo.add(*this,_q,x);
     if (curStrategyMethod & StrategyMethodValues::EXPAND)
       _intVars = IntVarArray(dynamic_cast<Space&>(*this),_intVars+x);
   }
 
-  template<class BranchType> std::vector<BrancherHandle>
+  template<class BranchType> void
   QSpaceInfo::branch(Home home, const BoolVar& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp) {
     BoolVarArgs vaX;
     vaX << x;
     return this->branch<BranchType>(home,vaX,vars,vals,bf,vvp);
   }
 
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const BoolVar& x, IntVarBranch vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const BoolVar& x, TieBreak<IntVarBranch> vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const BoolVar& x, IntVarBranch vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const BoolVar& x, TieBreak<IntVarBranch> vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
 
-  template<class BranchType> std::vector<BrancherHandle>
+  template<class BranchType> void
   QSpaceInfo::branch(Home home, const IntVar& x, BranchType vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp) {
     IntVarArgs vaX;
     vaX << x;
     return this->branch<BranchType>(home,vaX,vars,vals,bf,vvp);
   }
 
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const IntVar& x, IntVarBranch vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const IntVar& x, TieBreak<IntVarBranch> vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const BoolVarArgs& x, IntVarBranch vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const BoolVarArgs& x, TieBreak<IntVarBranch> vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
 
-  template<class BranchType> std::vector<BrancherHandle>
+  template<class BranchType> void
   QSpaceInfo::branch(Home home, const BoolVarArgs& x, BranchType vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp) {
-    std::vector<BrancherHandle> result;
     assert(x.size() > 0);
-    if (home.failed()) return result;
+    if (home.failed()) return;
 
     // Get the quantifier of the first variable of the quantifier
     TQuantifier curQ = EXISTS;
@@ -396,32 +391,27 @@ namespace Gecode {
       }
 
       // Add brancher for unwatched variables
-      BrancherHandle bh;
       if (vvp) {
-        customBoolVVP = vvp;
-        bh = Gecode::branch(home,UW_X,vars,vals,bf,&tripleChoice);
+	customBoolVVP = vvp;
+        Gecode::branch(home,UW_X,vars,vals,bf,&tripleChoice);
       } else {
-        bh = Gecode::branch(home,UW_X,vars,vals,bf,&doubleChoice);
+        Gecode::branch(home,UW_X,vars,vals,bf,&doubleChoice);
       }
 
       // Update shared info
-      updateQSpaceInfo(bh,curQ,UW_X);
-      result.push_back(bh);
+      updateQSpaceInfo(curQ,UW_X);
       // Update current quantifier
       curQ = qi;
     }
-
-    return result;
   }
 
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const BoolVarArgs& x, IntVarBranch vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const BoolVarArgs& x, TieBreak<IntVarBranch> vars, IntValBranch vals, BoolBranchFilter bf, BoolVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const IntVar& x, IntVarBranch vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const IntVar& x, TieBreak<IntVarBranch> vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
 
-  template<class BranchType> std::vector<BrancherHandle>
+  template<class BranchType> void
   QSpaceInfo::branch(Home home, const IntVarArgs& x, BranchType vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp) {
-    std::vector<BrancherHandle> result;
     assert(x.size() > 0);
-    if (home.failed()) return result;
+    if (home.failed()) return;
 
     // Get the quantifier of the first variable of the quantifier
     TQuantifier curQ = EXISTS;
@@ -448,25 +438,21 @@ namespace Gecode {
       }
 
       // Add brancher for unwatched variables
-      BrancherHandle bh;
       if (vvp) {
-        customIntVVP = vvp;
-        bh = Gecode::branch(home,UW_X,vars,vals,bf,&tripleChoice);
+	customIntVVP = vvp;
+        Gecode::branch(home,UW_X,vars,vals,bf,&tripleChoice);
       } else {
-        bh = Gecode::branch(home,UW_X,vars,vals,bf,&doubleChoice);
+        Gecode::branch(home,UW_X,vars,vals,bf,&doubleChoice);
       }
 
       // Update shared info
-      updateQSpaceInfo(bh,curQ,UW_X);
-      result.push_back(bh);
+      updateQSpaceInfo(curQ,UW_X);
       // Update current quantifier
       curQ = qi;
     }
-
-    return result;
   }
 
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const IntVarArgs& x, IntVarBranch vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
-  template QUACODE_EXPORT std::vector<BrancherHandle> QSpaceInfo::branch<>(Home home, const IntVarArgs& x, TieBreak<IntVarBranch> vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const IntVarArgs& x, IntVarBranch vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
+  template QUACODE_EXPORT void QSpaceInfo::branch<>(Home home, const IntVarArgs& x, TieBreak<IntVarBranch> vars, IntValBranch vals, IntBranchFilter bf, IntVarValPrint vvp);
 
 }

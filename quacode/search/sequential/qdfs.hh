@@ -137,7 +137,7 @@ namespace Gecode { namespace Search { namespace Sequential {
         // If no more propagators in space then all is succes below.
         // We deal with that case as any other success.
         // If it remains only Watch Propagators, then it is a success!
-        if ((!cur->failed()) && (cur->propagators() == dynamic_cast<QSpaceInfo*>(cur)->watchConstraints())) curStatus = SS_SOLVED;
+        if ((!cur->failed()) && (Home(*cur).propagatorgroup().size(*cur) == dynamic_cast<QSpaceInfo*>(cur)->watchConstraints())) curStatus = SS_SOLVED;
 
         switch (curStatus) {
         case SS_FAILED:

@@ -123,12 +123,7 @@ public:
 
 /// Succeed the space
 static void gf_success(Space& home) {
-  Space::Branchers b(home);
-  while (b()) {
-    BrancherHandle bh(b.brancher());
-    ++b;
-    bh.kill(home);
-  }
+  Home(home).branchergroup().kill(home);
 }
 
 /// Dummy function
