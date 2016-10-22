@@ -38,15 +38,25 @@ You can grab the last release by downloading one of the following files :
 - [quacode-1.0.2.tar.gz](http://www.barichard.com/packages/quacode-1.0.2.tar.gz)
 - [quacode-1.0.2.zip](http://www.barichard.com/packages/quacode-1.0.2.zip)
 
-### From github
+### From Github
+
+You can grab the master version of Quacode:
+ 
+~~~~
+git clone https://github.com/VynceCook/quacode.git
+~~~~
 
 Build Quacode
 =============
 
-To compile Quacode, you have to install cmake. To setup the
-compilation process for your environment, you can launch
-cmake by invoking
+## From the Gecode source tree
+To compile Quacode from the Gecode source tree, you have to install cmake. To setup the
+compilation process for your environment, you can launch cmake by invoking:
+
+~~~~
   cmake .
+~~~~
+
 in the toplevel Quacode directory.
 
 By default, 'make install' will install all the files in
@@ -56,7 +66,9 @@ an installation prefix other than '/usr/local' setting the
 for instance 'cmake -DCMAKE_INSTALL_PREFIX:PATH=$HOME .'
 
 Then you can compile the code by invoking
+~~~~
   make
+~~~~
 in the toplevel Quacode directory.
 
 After a successful compilation, you can install Quacode
