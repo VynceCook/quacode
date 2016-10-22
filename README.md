@@ -1,3 +1,5 @@
+![Quacode logo](/logo_quacode.png)
+
 Quacode
 =======
 
