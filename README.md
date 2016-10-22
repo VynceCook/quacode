@@ -22,13 +22,13 @@ As Gecode, Quacode is distributed under the MIT licence. Source code and example
 Download Quacode
 ================
 
-## From downloadable source and binary archive files
+## Downloadable source and binary archive files
 You can grab the last release at the [Github release section](https://github.com/VynceCook/quacode/releases). You will find some archives of the source files and binaries (the binary packages provide the example programs: Baker, NimFibo, MatrixGame, Connect-Four).
 
-## From Gecode web site
+## At the Gecode web site
 Quacode is provided with the last Gecode release (started from version 4.3.1), you can grab the last release from the [Gecode](http://www.gecode.org/) web site.
 
-## Last master sources from Github
+## Latest master sources from Github
 
 You can grab the master version of Quacode:
  
@@ -41,8 +41,9 @@ the latest Gecode release.
 
 Build Quacode
 =============
+Depending on the location of the source files (from Gecode web site or from Github) you have to select the right build method.
 
-## From the Gecode source tree
+## With source files from the Gecode source tree
 To compile Quacode from the Gecode source tree, you first have to install cmake. To setup the compilation process for your environment, you can launch cmake by invoking:
 ~~~~
   cmake .
@@ -68,5 +69,12 @@ library and examples by invoking
 ~~~~
 in the build directory.
 
-## From the Github sources
+## With source files from Github
+Even if you downloaded Quacode from Github, you have to previously get and compiled Gecode.
+You have to call `cmake` and provide it the location of the Gecode libraries and sources.
+~~~~
+  cmake -DGECODE_BIN=/path/to/gecode/libraries -DGECODE_SRC=/path/to/gecode/sources .
+~~~~
+Like every cmake project, you can create a separate build tree to not mix object and source files.
 
+Now that you configured the build tree, you can build it by using `make` and install the binaries with `make install` (see previous section for more details).
