@@ -48,6 +48,9 @@ You can grab the master version of Quacode:
 git clone https://github.com/VynceCook/quacode.git
 ~~~~
 
+These sources are the latest ones (not yet released). It may not compile with
+the latest Gecode release.
+
 Build Quacode
 =============
 
@@ -76,3 +79,6 @@ library and examples by invoking
   make install
 ~~~~
 in the build directory.
+
+## From the Github sources
+
