@@ -22,25 +22,13 @@ As Gecode, Quacode is distributed under the MIT licence. Source code and example
 Download Quacode
 ================
 
-## Binary packages
-The binary packages provide the example programs: Baker, NimFibo, MatrixGame, Connect-Four
+## From downloadable source and binary archive files
+You can grab the last release at the [Github release section](https://github.com/VynceCook/quacode/releases). You will find some archives of the source files and binaries (the binary packages provide the example programs: Baker, NimFibo, MatrixGame, Connect-Four).
 
-- Linux x86 (64 bit, static linked): [zip](http://www.barichard.com/packages/quacode-1.0.2-linux-64.zip)
-- Linux x86 (32 bit, static linked): [zip](http://www.barichard.com/packages/quacode-1.0.2-linux-32.zip)
-- Windows x86 (32 bit, MSVC 2013): [zip](http://www.barichard.com/packages/quacode-1.0.2-win-32.zip)
-
-## Source Packages
-The sources of Quacode can be retrieve from several places.
-
-### From Gecode web site
+## From Gecode web site
 Quacode is provided with the last Gecode release (started from version 4.3.1), you can grab the last release from the [Gecode](http://www.gecode.org/) web site.
 
-### From downloadable source packages
-You can grab the last release by downloading one of the following files :
-- [quacode-1.0.2.tar.gz](http://www.barichard.com/packages/quacode-1.0.2.tar.gz)
-- [quacode-1.0.2.zip](http://www.barichard.com/packages/quacode-1.0.2.zip)
-
-### From Github
+## Last master sources from Github
 
 You can grab the master version of Quacode:
  
